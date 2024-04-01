@@ -1,5 +1,5 @@
 import requests
-import DataBase_Countries.py
+import DataBase_Countries
 
 def get_visa_free_destinations(passport_country):
     api_url = f'https://rough-sun-2523.fly.dev/api/{passport_country}'
@@ -9,18 +9,15 @@ def get_visa_free_destinations(passport_country):
         visa_free_destinations = response.json().get('visa_free_destinations', [])
         return visa_free_destinations
     else:
-        return []  # Return an empty list if there's an issue with the API request
+        return [] 
 
-# Get user input for the passport country
 passport_country = input("Enter your passport country: ")
-
-# Fetch visa-free destinations data from the API
 visa_free_destinations = get_visa_free_destinations(passport_country)
-
 if visa_free_destinations:
     print(f"Visa-Free travel destinations for {passport_country}:")
     for destination_country in visa_free_destinations:
         print(destination_country)
 else:
     print("No visa-free travel destinations found.")
+
 
