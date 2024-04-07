@@ -1,8 +1,8 @@
 import streamlit as st
 import requests
-from DataBase_Countries import get_country_codes
+from DataBase_Countries import get_country_code
 
-def run_visa_checker:
+def run_visa_checker():
     st.title('Visa Requirement Checker')
 
     # Input fields (departure and destination country names)
