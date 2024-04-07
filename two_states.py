@@ -44,7 +44,3 @@ def run_visa_checker():
             else:
                 st.error(f"Failed to retrieve data. Status code: {response.status_code}")
 
-# This line should be at the end of your 'two_states.py' file.
-# It ensures that when you run this file directly, it calls the function and runs the Streamlit app.
-if __name__ == "__main__":
-    run_visa_checker()
