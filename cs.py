@@ -17,7 +17,7 @@ st.markdown("""
         background-position: center;
         background-repeat: no-repeat;
         background-size: cover;
-        background-image: url("path/to/your/background.jpg");
+        background-image: url("https://img.freepik.com/free-photo/painting-mountain-lake-with-mountain-background_188544-9126.jpg");
         z-index: -1;
         top: 0;
         left: 0;
