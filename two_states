@@ -40,8 +40,11 @@ def run_visa_checker():
                 if 'visa required' in data.get('category', '').lower():
                     st.success('A visa is required.')
                 else:
-                    st.info('A visa is not required or other conditions apply.')
+                    st.info('A visa is not required')
             else:
                 st.error(f"Failed to retrieve data. Status code: {response.status_code}")
 
-
+# This line should be at the end of your 'two_states.py' file.
+# It ensures that when you run this file directly, it calls the function and runs the Streamlit app.
+if __name__ == "__main__":
+    run_visa_checker()
