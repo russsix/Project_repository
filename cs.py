@@ -25,10 +25,6 @@ st.markdown(custom_css, unsafe_allow_html=True)
 
 st.title('🌍 Check-it')
 
-# Sidebar for app mode selection
-app_mode = st.sidebar.radio(
-    "Choose the feature you want to use:",
-    ("🛂 Visa Requirement Checker", "✈️ Visa-Free Destinations", "🧳 Flight Suggestions")
 )
 
 # Create columns for different sections
