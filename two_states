@@ -6,8 +6,8 @@ def run_visa_checker():
     st.title('Visa Requirement Checker')
 
     # Input fields (departure and destination country names)
-    departure_country_name = st.text_input("Insert your departure country:", '').strip()
-    destination_country_name = st.text_input("Insert your destination country:", '').strip()
+    departure_country_name = st.text_input("Insert your departure country:", '').title().strip()
+    destination_country_name = st.text_input("Insert your destination country:", '').title().strip()
 
     # Variables to keep track of input validation
     departure_valid = True
