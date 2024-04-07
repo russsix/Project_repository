@@ -251,3 +251,5 @@ country_codes={
     "Zambia": "zm",
     "Zimbabwe": "zw"
 }
+def get_country_code(country_name):
+    return country_codes.get(country_name.title(), None)
