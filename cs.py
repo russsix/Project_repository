@@ -7,6 +7,9 @@ app_mode = st.sidebar.radio(
 )
 if app_mode == "Visa Requirement Checker":
     run_visa_checker()
+else:
+    None
+
 
 
 
