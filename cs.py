@@ -1,3 +1,4 @@
+import streamlit as st
 from two_states import run_visa_checker
 
 st.title('Check-it')
