@@ -40,7 +40,7 @@ def run_visa_checker():
                 if 'visa required' in data.get('category', '').lower():
                     st.success('A visa is required.')
                 else:
-                    st.info('A visa is not required or other conditions apply.')
+                    st.info('A visa is not required')
             else:
                 st.error(f"Failed to retrieve data. Status code: {response.status_code}")
 
