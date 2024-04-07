@@ -2,8 +2,9 @@ import DataBase_Countries
 import requests
 import streamlit as st
 
-
-url = 'https://rough-sun-2523.fly.dev/api/CH/IT'
+departure country = input("Insert your departure country")
+destination country = input("Insert your destination country")
+url = 'https://rough-sun-2523.fly.dev/api/departure country/destination country'
 response = requests.get(url)
 
 if response.status_code == 200:
