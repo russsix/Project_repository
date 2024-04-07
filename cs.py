@@ -1,40 +1,59 @@
 import streamlit as st
 from two_states import run_visa_checker
 
-# Assume these functions exist in separate modules that you've created for each feature.
-# from visa_free import run_visa_free
-# from flight_comparison import run_flight_comparison
+# Custom CSS to set the background and style elements
+custom_css = """
+<style>
+    .reportview-container .main .block-container {
+        padding-top: 5rem;
+        padding-bottom: 5rem;
+    }
+    .reportview-container .main {
+        background-image: url('https://www.synergytravelsindia.com/wp-content/uploads/2020/08/schengen-travel-visa.jpg');
+        background-size: cover;
+    }
+    h1 {
+        color: #f63366;
+    }
+    .sidebar .sidebar-content {
+        background-color: #f1f1f1;
+    }
+</style>
+"""
 
-# Define a function for each feature that you want to run when its corresponding button is clicked
-def run_visa_free():
-    st.write("Visa-Free Destinations feature will be implemented here.")
+st.markdown(custom_css, unsafe_allow_html=True)
 
-def run_flight_comparison():
-    st.write("Flight Comparison feature will be implemented here.")
+st.title('🌍 Check-it')
 
-# Use session state to keep track of which feature is active
-if 'current_page' not in st.session_state:
-    st.session_state['current_page'] = None
+# Sidebar for app mode selection
+app_mode = st.sidebar.radio(
+    "Choose the feature you want to use:",
+    ("🛂 Visa Requirement Checker", "✈️ Visa-Free Destinations", "🧳 Flight Suggestions")
+)
 
-# Layout with feature cards
+# Create columns for different sections
 col1, col2, col3 = st.columns(3)
 
 with col1:
-    if st.button("🌍 Two States"):
-        st.session_state['current_page'] = 'visa_checker'
+    if st.button("🛂 Visa Requirement Checker"):
+        app_mode = "🛂 Visa Requirement Checker"
 
 with col2:
-    if st.button("✈️ Three States"):
-        st.session_state['current_page'] = 'visa_free'
+    if st.button("✈️ Visa-Free Destinations"):
+        app_mode = "✈️ Visa-Free Destinations"
 
 with col3:
-    if st.button("🧳 Flight Comparison"):
-        st.session_state['current_page'] = 'flight_comparison'
+    if st.button("🧳 Flight Suggestions"):
+        app_mode = "🧳 Flight Suggestions"
 
-# Logic to handle page navigation
-if st.session_state['current_page'] == 'visa_checker':
+# Based on the selection, run the corresponding feature function
+if app_mode == "🛂 Visa Requirement Checker":
     run_visa_checker()
-elif st.session_state['current_page'] == 'visa_free':
-    run_visa_free()
-elif st.session_state['current_page'] == 'flight_comparison':
-    run_flight_comparison()
+elif app_mode == "✈️ Visa-Free Destinations":
+    st.info("The Visa-Free Destinations feature is coming soon.")
+elif app_mode == "🧳 Flight Suggestions":
+    st.info("The Flight Suggestions feature is coming soon.")
+
+
+"""fonti
+https://docs.kanaries.net/topics/Streamlit/streamlit-theming"""
