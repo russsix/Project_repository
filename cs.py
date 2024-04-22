@@ -1,99 +1,66 @@
 import streamlit as st
 from two_states import run_visa_checker
 
+# Placeholder functions for the other features
 def run_visa_free_destinations():
     st.write("Visa-Free Destinations feature coming soon.")
 
 def run_flight_comparison():
     st.write("Flight Comparison feature coming soon.")
 
-# Set page config
-st.set_page_config(page_title="Check-it", layout="wide", page_icon="🌍")
-
-# Custom styles
 st.markdown("""
 <style>
-    .streamlit-container {
-        max-width: 1200px;
-        margin: auto;
-    }
-    .stButton>button {
+    .background {
+        position: absolute;
         width: 100%;
-        border: none;
-        padding: 1rem;
-        font-size: 1rem;
-        border-radius: 0.5rem;
-        margin: 0.5rem 0;
-        transition: background-color 0.3s, transform 0.3s;
+        height: 100%;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-image: url("https://img.freepik.com/free-photo/painting-mountain-lake-with-mountain-background_188544-9126.jpg");
+        z-index: -1;
+        top: 0;
+        left: 0;
     }
-    .stButton>button:hover {
-        background-color: #f63366;
-        color: white;
-        transform: translateY(-3px);
-    }
-    .stTextInput>div>div>input {
-        padding: 0.75rem;
-        border-radius: 0.5rem;
-    }
+
     h1 {
         color: white;
+        text-align: center;
     }
-    .tab-style {
-        box-shadow: none;
-        border: 1px solid #fff;
-        border-radius: 0.5rem;
-        margin: 1rem 0.5rem;
+
+    .feature-card {
+        background: rgba(255, 255, 255, 0.8);
+        border-radius: 10px;
+        padding: 10px;
+        margin: 10px;
     }
-</style>
-""", unsafe_allow_html=True)
 
-# Header section with a background image
-st.markdown("""
-<div style="background-color:#464e5f;padding:2rem;text-align:center;">
-    <h1 style="color:white;font-size:3rem;">🌍 Check-it</h1>
-</div>
-""", unsafe_allow_html=True)
-
-# Create the layout with tabs for a cleaner navigation experience
-tab1, tab2, tab3 = st.tabs(["🌍 Two States", "✈️ Visa-Free Destinations", "🧳 Flight Comparison"])
-
-with tab1:
-    st.markdown("<div class='tab-style'>", unsafe_allow_html=True)
-    run_visa_checker()
-    st.markdown("</div>", unsafe_allow_html=True)
-
-with tab2:
-    st.markdown("<div class='tab-style'>", unsafe_allow_html=True)
-    run_visa_free_destinations()
-    st.markdown("</div>", unsafe_allow_html=True)
-
-with tab3:
-    st.markdown("<div class='tab-style'>", unsafe_allow_html=True)
-    run_flight_comparison()
-    st.markdown("</div>", unsafe_allow_html=True)
-
-# Footer
-st.markdown("---")
-st.markdown("Check-it | A tool for all your travel documentation needs.")
-
-# To apply styles globally across the app, including the sidebar
-st.markdown("""
-<style>
-    /* This is to style the entire app with a background image, adjust the url accordingly */
-    body {
-        background-image: url("https://img.freepik.com/free-photo/painting-mountain-lake-with-mountain-background_188544-9126.jpg");
-        background-size: cover;
-        background-attachment: fixed;
-    }
-    /* This sets the sidebar style */
-    .css-1d391kg {
-        background-color: #f1f1f1;
-        color: #666;
-    }
-    /* Customize the color of the active tab */
-    .st-ae {
-        background-color: #f63366;
-        color: white;
+    /* Additional styles to enhance the feature card appearance */
+    .stButton>button {
+        font-size: 16px;
+        width: 100%;
+        border-radius: 10px;
+        border: 2px solid #f63366;
+        margin: 10px 0;
     }
 </style>
+<div class="background"></div>
 """, unsafe_allow_html=True)
+
+# Display the app title
+st.title('🌍 Check-it')
+
+# Create the layout with columns and feature cards
+col1, col2, col3 = st.columns(3)
+
+with col1:
+    if st.button("🌍 Two States", key="two_states"):
+        run_visa_checker()
+
+with col2:
+    if st.button("✈️ Visa-Free Destinations", key="visa_free_destinations"):
+        run_visa_free_destinations()
+
+with col3:
+    if st.button("🧳 Flight Comparison", key="flight_comparison"):
+        run_flight_comparison()
