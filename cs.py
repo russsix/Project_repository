@@ -1,7 +1,6 @@
 import streamlit as st
 from two_states import run_visa_checker
 
-# Placeholder functions for the other features
 def run_visa_free_destinations():
     st.write("Visa-Free Destinations feature coming soon.")
 
@@ -22,21 +21,14 @@ st.markdown("""
         top: 0;
         left: 0;
     }
-
-    h1 {
-        color: white;
-        text-align: center;
-    }
-
+    h1 { color: white; text-align: center; }
     .feature-card {
         background: rgba(255, 255, 255, 0.8);
         border-radius: 10px;
         padding: 10px;
         margin: 10px;
     }
-
-    /* Additional styles to enhance the feature card appearance */
-    .stButton>button {
+    .stButton > button {
         font-size: 16px;
         width: 100%;
         border-radius: 10px;
@@ -47,10 +39,7 @@ st.markdown("""
 <div class="background"></div>
 """, unsafe_allow_html=True)
 
-# Display the app title
 st.title('🌍 Check-it')
-
-# Create the layout with columns and feature cards
 col1, col2, col3 = st.columns(3)
 
 with col1:
