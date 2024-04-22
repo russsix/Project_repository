@@ -5,19 +5,9 @@ from DataBase_Countries import get_country_code
 def run_visa_checker():
     st.title('Visa Requirement Checker')
 
-    # Initialize session states for input fields
-    if 'departure_country' not in st.session_state:
-        st.session_state['departure_country'] = ''
-    if 'destination_country' not in st.session_state:
-        st.session_state['destination_country'] = ''
-
     # Get user input for departure and destination countries
-    departure_country = st.text_input("Enter your departure country:", value=st.session_state['departure_country'])
-    destination_country = st.text_input("Enter your destination country:", value=st.session_state['destination_country'])
-
-    # Update session state
-    st.session_state['departure_country'] = departure_country
-    st.session_state['destination_country'] = destination_country
+    departure_country = st.text_input("Enter your departure country:", key='departure_country')
+    destination_country = st.text_input("Enter your destination country:", key='destination_country')
 
     # Get the country codes
     departure_code = get_country_code(departure_country) if departure_country else None
@@ -31,7 +21,6 @@ def run_visa_checker():
 
     # Button to check visa requirements
     if st.button('Check Visa Requirement') and departure_code and destination_code:
-        # Use the country codes to make the API request
         url = f'https://rough-sun-2523.fly.dev/api/{departure_code}/{destination_code}'
         response = requests.get(url)
         if response.status_code == 200:
@@ -43,4 +32,3 @@ def run_visa_checker():
                 st.info('A visa is not required.')
         else:
             st.error(f"Failed to retrieve data. Status code: {response.status_code}")
-
