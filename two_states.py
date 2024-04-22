@@ -1,4 +1,3 @@
-# two_states.py
 import streamlit as st
 import requests
 from DataBase_Countries import get_country_code
@@ -6,35 +5,31 @@ from DataBase_Countries import get_country_code
 def run_visa_checker():
     st.title('Visa Requirement Checker')
 
-    departure_country_name = st.text_input("Insert your departure country:", '').title().strip()
-    destination_country_name = st.text_input("Insert your destination country:", '').title().strip()
+    # Get user input for departure and destination countries
+    departure_country = st.text_input("Enter your departure country:").title().strip()
+    destination_country = st.text_input("Enter your destination country:").title().strip()
 
-    departure_valid = True
-    destination_valid = True
+    # Get the country codes
+    departure_code = get_country_code(departure_country) if departure_country else None
+    destination_code = get_country_code(destination_country) if destination_country else None
 
-    departure_country_code = get_country_code(departure_country_name) if departure_country_name else None
-    destination_country_code = get_country_code(destination_country_name) if destination_country_name else None
+    # Validate the country names and display appropriate error messages
+    if departure_country and not departure_code:
+        st.error(f"'{departure_country}' is not recognized. Please enter a valid country name.")
+    if destination_country and not destination_code:
+        st.error(f"'{destination_country}' is not recognized. Please enter a valid country name.")
 
-    if departure_country_name and not departure_country_code:
-        st.error(f"The country '{departure_country_name}' is not recognized. Please enter a valid country name.")
-        departure_valid = False
-
-    if destination_country_name and not destination_country_code:
-        st.error(f"The country '{destination_country_name}' is not recognized. Please enter a valid country name.")
-        destination_valid = False
-
-    if st.button('Check Visa Requirement') and departure_valid and destination_valid:
-        if departure_country_code and destination_country_code:
-            # Use the country codes in the API request
-            url = f'https://rough-sun-2523.fly.dev/api/{departure_country_code}/{destination_country_code}'
-            response = requests.get(url)
-
-            if response.status_code == 200:
-                data = response.json()
-                if 'visa required' in data.get('category', '').lower():
-                    st.success('A visa is required.')
-                else:
-                    st.info('A visa is not required')
+    # Button to check visa requirements
+    if st.button('Check Visa Requirement') and departure_code and destination_code:
+        # Use the country codes to make the API request
+        url = f'https://rough-sun-2523.fly.dev/api/{departure_code}/{destination_code}'
+        response = requests.get(url)
+        if response.status_code == 200:
+            data = response.json()
+            visa_required = 'visa required' in data.get('category', '').lower()
+            if visa_required:
+                st.success('A visa is required.')
             else:
-                st.error(f"Failed to retrieve data. Status code: {response.status_code}")
-
+                st.info('A visa is not required.')
+        else:
+            st.error(f"Failed to retrieve data. Status code: {response.status_code}")
