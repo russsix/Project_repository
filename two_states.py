@@ -30,7 +30,7 @@ def run_visa_checker():
             elif 'VOA' in data.get('status', ''):
                 st.warning ('You need to obtain a visa upon arrival.')
             elif 'VR' in data.get ('status', ''):
-                st.error ('A visa is required')
+                st.error ('A visa is required.')
             elif 'CB' in data.get ('status', ''):
                 st.error ('Travel is currently banned due to Covid-19 restrictions.')
             elif 'NA' in data.get ('status', ''):
