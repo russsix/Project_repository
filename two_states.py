@@ -24,17 +24,17 @@ def run_visa_checker():
             category = data.get('category', '').lower()
             
             if 'VR' in category:
-                st.error('A visa is required.')
+                st.success('A visa is required.')
             elif 'VOA' in category:
-                st.warning('You need to obtain a visa upon arrival.')
+                st.success('You need to obtain a visa upon arrival.')
             elif 'VF' in category:
                 st.success('You can enter the country without a visa.')
             elif 'CB' in category:
-                st.warning('Travel is currently banned due to Covid-19 restrictions.')
+                st.success('Travel is currently banned due to Covid-19 restrictions.')
             elif 'NA' in category:
-                st.error('No entry is permitted to travelers from your country.')
+                st.success('No entry is permitted to travelers from your country.')
             else:
-                st.info('The visa requirement for your destination is not clear or is unspecified.')
+                st.success('The visa requirement for your destination is not clear or is unspecified.')
         else:
             st.error(f"Failed to retrieve data. Status code: {response.status_code}")
 
