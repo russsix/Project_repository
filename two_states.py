@@ -21,10 +21,10 @@ def run_visa_checker():
         response = requests.get(url)
         if response.status_code == 200:
             data = response.json()
-            if 'visa required' in data.get('category', '').lower():
-                st.success('A visa is required.')
+            if 'VF' in data.get('category', '').lower():
+                st.success('A visa is not required.')
             else:
-                st.info('A visa is not required.')
+                st.info('A visa is required.')
         else:
             st.error(f"Failed to retrieve data. Status code: {response.status_code}")
 run_visa_checker()
