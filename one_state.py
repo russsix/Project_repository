@@ -1,6 +1,17 @@
 import streamlit as st
 import requests
 from DataBase_Countries import get_country_code
+Data_Objective_Type={
+    "passport": String,
+    "VR": Category,
+    "VOA": Category,
+    "VF": Category,
+    "CB": Category,
+    "NA": Category,
+    "last_updated": String,
+    "error": Error,
+}
+
 
 destinations(passport_country):
     api_url = f'https://rough-sun-2523.fly.dev/api/{passport_country}'
