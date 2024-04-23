@@ -252,4 +252,4 @@ country_codes={
     "Zimbabwe": "zw"
 }
 def get_country_code(country_name):
-    return country_codes.get(country_name.title())
+    return country_codes.get(country_name.strip())
