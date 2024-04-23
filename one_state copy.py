@@ -19,6 +19,5 @@ def main():
         else:
             st.write("No visa-free travel destinations found.")
 
-if __name__ == "__main__":
-    main()
+main()
 
