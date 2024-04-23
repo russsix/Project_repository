@@ -20,21 +20,31 @@ def run_visa_checker():
             data = response.json()
             if data:
                 st.write("Visa Required Countries:")
-                Visa_Required_Countries=', '.join(data.get('vr', {}).get('data', []))
-                st.write (get_country_name(Visa_Required_Countries))
+                visa_required_countries = [get_country_name(code) for code in data.get('vr', {}).get('data', [])]
+                st.write(', '.join(visa_required_countries))
+
+                # Visa on Arrival Countries
                 st.write("Visa on Arrival Countries:")
-                st.write(', '.join(data.get('voa', {}).get('data', [])))
+                visa_on_arrival_countries = [get_country_name(code) for code in data.get('voa', {}).get('data', [])]
+                st.write(', '.join(visa_on_arrival_countries))
+
+                # Visa Free Countries
                 st.write("Visa Free Countries:")
-                st.write(', '.join(data.get('vf', {}).get('data', [])))
+                visa_free_countries = [get_country_name(code) for code in data.get('vf', {}).get('data', [])]
+                st.write(', '.join(visa_free_countries))
+
+                # Covid Ban Countries
                 if data.get('cb', {}).get('data'):
                     st.write("Covid Ban Countries:")
-                    st.write(', '.join(data.get('cb', {}).get('data', [])))
+                    covid_ban_countries = [get_country_name(code) for code in data.get('cb', {}).get('data', [])]
+                    st.write(', '.join(covid_ban_countries))
+
+                # No Admission Countries
                 if data.get('na', {}).get('data'):
                     st.write("No Admission Countries:")
-                    st.write(', '.join(data.get('na', {}).get('data', [])))
+                    no_admission_countries = [get_country_name(code) for code in data.get('na', {}).get('data', [])]
+                    st.write(', '.join(no_admission_countries))
         else:
             st.error(f"Failed to retrieve data. Status code: {response.status_code}")
 
 run_visa_checker()
-        
-
