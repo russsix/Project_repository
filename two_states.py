@@ -22,7 +22,7 @@ def run_visa_checker():
         if response.status_code == 200:
             data = response.json()
             if 'VF' in data.get('status', ''):
-                st.success('A visa is not required.')
+                st.warning('A visa is not required.')
             else:
                 st.info('A visa is required.')
         else:
