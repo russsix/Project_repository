@@ -2,18 +2,7 @@ import streamlit as st
 import requests
 from DataBase_Countries import get_country_code
 
-Data_Object_Type = {
-    "passport": str,
-    "VR": str,
-    "VOA": str,
-    "VF": str,
-    "CB": str,
-    "NA": str,
-    "last_updated": str,
-    "error": str,
-}
-
-def get_visa_free_destinations(passport_country):
+destinations(passport_country):
     api_url = f'https://rough-sun-2523.fly.dev/api/{passport_country}'
     response = requests.get(api_url)
     
