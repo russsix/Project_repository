@@ -17,7 +17,22 @@ def run_visa_checker():
         response = requests.get(url)
         if response.status_code == 200:
             data = response.json()
+            if data:
+                st.write("Visa Required Countries:")
+                st.write(', '.join(data.get('vr', {}).get('data', [])))
+                st.write("Visa on Arrival Countries:")
+                st.write(', '.join(data.get('voa', {}).get('data', [])))
+                st.write("Visa Free Countries:")
+                st.write(', '.join(data.get('vf', {}).get('data', [])))
+                if data.get('cb', {}).get('data'):
+                    st.write("Covid Ban Countries:")
+                    st.write(', '.join(data.get('cb', {}).get('data', [])))
+                if data.get('na', {}).get('data'):
+                    st.write("No Admission Countries:")
+                    st.write(', '.join(data.get('na', {}).get('data', [])))
         else:
             st.error(f"Failed to retrieve data. Status code: {response.status_code}")
+
 run_visa_checker()
+        
 
