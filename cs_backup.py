@@ -1,3 +1,6 @@
+import streamlit as st
+from two_states import run_visa_checker
+
 def run_visa_free_destinations():
     st.write("Visa-Free Destinations feature coming soon.")
 
