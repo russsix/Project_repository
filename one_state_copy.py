@@ -3,7 +3,7 @@ import requests
 from DataBase_Countries import get_country_code
 from DataBase_Countries import get_country_name
 
-def run_visa_checker():
+def run_visa_status():
     st.title('Visa Country Status')
 
     departure_country = st.text_input("Enter your departure country:", key='departure_country')
@@ -47,4 +47,4 @@ def run_visa_checker():
         else:
             st.error(f"Failed to retrieve data. Status code: {response.status_code}")
 
-run_visa_checker()
+run_visa_status()
