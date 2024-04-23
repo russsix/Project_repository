@@ -13,13 +13,18 @@ def main():
     st.title("Visa-Free Travel Destinations")
     passport_country = st.text_input("Enter your passport country: ")
     if st.button("Search"):
-        visa_free_destinations = get_visa_free_destinations(passport_country)
-        if visa_free_destinations:
+        visa_info = get_visa_free_destinations(passport_country)
+        if visa_info:
             st.write(f"Visa-Free travel destinations for {passport_country}:")
-            for destination_country in visa_free_destinations:
-                st.write(destination_country)
+            st.write("Visa Required:", ', '.join(visa_info['vr']['data']))
+            st.write("Visa on Arrival:", ', '.join(visa_info['voa']['data']))
+            st.write("Visa Free:", ', '.join(visa_info['vf']['data']))
+            if visa_info['cb']['data']:  # Check if list is not empty
+                st.write("Covid Ban:", ', '.join(visa_info['cb']['data']))
+            if visa_info['na']['data']:  # Check if list is not empty
+                st.write("No Admission:", ', '.join(visa_info['na']['data']))
         else:
-            st.write("No visa-free travel destinations found.")
+            st.write("No visa information found or failed to retrieve data.")
 
 if __name__ == "__main__":
     main()
