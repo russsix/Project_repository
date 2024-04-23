@@ -263,7 +263,3 @@ def get_country_name(code):
     return country_names.get(normalized_code, "Unknown Country")
 
 st.write ('hi')
-test_code = 'CH'  # Assuming this is a code you received from the API
-country_name = get_country_name(test_code)
-answer = assert country_name == 'Switzerland'
-st.write(answer)
