@@ -23,11 +23,14 @@ def run_visa_checker():
                 response = requests.get(url)
                 if response.status_code == 200:
                     data = response.json()
-                    visa_required = 'visa required' in data.get('category', '').lower()
-                    if visa_required:
-                        st.success('A visa is required.')
+                    if 'category' in data:
+                        visa_required = 'visa required' in data['category'].lower()
+                        if visa_required:
+                            st.success('A visa is required.')
+                        else:
+                            st.info('A visa is not required.')
                     else:
-                        st.info('A visa is not required.')
+                        st.error('Unexpected data format received. Check API or data handling.')
                 else:
                     st.error(f"Failed to retrieve data. Status code: {response.status_code}")
 
