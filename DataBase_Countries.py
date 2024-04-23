@@ -1,5 +1,5 @@
 #DataBase_Countries
-
+import streamlit as st
 country_codes={
     "Andorra": "ad",
     "United Arab Emirates": "ae",
@@ -261,3 +261,5 @@ country_names = {code: country for country, code in country_codes.items()}
 def get_country_name(code):
     normalized_code = code.strip().upper()
     return country_names.get(normalized_code, "Unknown Country")
+
+st.write ('hi')
