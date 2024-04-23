@@ -21,8 +21,7 @@ def run_visa_checker():
         response = requests.get(url)
         if response.status_code == 200:
             data = response.json()
-            visa_required = 'visa required' in data.get('category', '').lower()
-            if visa_required:
+            if 'visa required' in data.get('category', '').lower():
                 st.success('A visa is required.')
             else:
                 st.info('A visa is not required.')
