@@ -27,7 +27,7 @@ def get_visa_free_destinations(passport_country):
             return visa_free_destinations
     return []
 
-passport_country = st.input("Enter your passport country: ")
+passport_country = st.text_input("Enter your passport country: ")
 visa_free_destinations = get_visa_free_destinations(passport_country)
 if visa_free_destinations:
     st.write(f"Visa-Free travel destinations for {passport_country}:")
