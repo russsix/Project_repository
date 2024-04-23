@@ -77,7 +77,7 @@ country_codes={
     "Faroe Islands": "fo",
     "France": "fr",
     "Gabon": "ga",
-    "United Kingdom oF Great Britain and Northern Ireland": "gb",
+    "United Kingdom of Great Britain and Northern Ireland": "gb",
     "Grenada": "gd",
     "Georgia": "ge",
     "French Guiana": "gf",
@@ -259,7 +259,6 @@ def get_country_code(country_name):
 
 country_names = {code: country for country, code in country_codes.items()}
 def get_country_name(code):
-    normalized_code = code.strip().upper()
-    return country_names.get(normalized_code, "Unknown Country")
+    return country_names.get(code, "Unknown Country")
     
 st.write (country_names)
