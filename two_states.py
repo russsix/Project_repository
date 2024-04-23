@@ -8,17 +8,17 @@ def run_visa_checker():
     departure_country = st.text_input("Enter your departure country:", key='departure_country')
     destination_country = st.text_input("Enter your destination country:", key='destination_country')
 
-    # Get the country codes
+    
     departure_code = get_country_code(departure_country) if departure_country else None
     destination_code = get_country_code(destination_country) if destination_country else None
 
-    # Validate the country names and display appropriate error messages
+    
     if departure_country and not departure_code:
         st.error(f"'{departure_country}' is not recognized. Please enter a valid country name.")
     if destination_country and not destination_code:
         st.error(f"'{destination_country}' is not recognized. Please enter a valid country name.")
 
-    # Button to check visa requirements
+    
     if st.button('Check Visa Requirement') and departure_code and destination_code:
         url = f'https://rough-sun-2523.fly.dev/api/{departure_code}/{destination_code}'
         response = requests.get(url)
