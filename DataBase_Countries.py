@@ -77,7 +77,7 @@ country_codes={
     "Faroe Islands": "fo",
     "France": "fr",
     "Gabon": "ga",
-    "United Kingdom OF Great Britain And Northern Ireland": "gb",
+    "United Kingdom oF Great Britain and Northern Ireland": "gb",
     "Grenada": "gd",
     "Georgia": "ge",
     "French Guiana": "gf",
@@ -251,5 +251,8 @@ country_codes={
     "Zambia": "zm",
     "Zimbabwe": "zw"
 }
+
+normalized_country_codes = {key.lower(): value for key, value in country_codes.items()}
 def get_country_code(country_name):
-    return country_codes.get(country_name.strip().title())
+    normalized_name = country_name.strip().lower()
+    return normalized_country_codes.get(normalized_name, None)
