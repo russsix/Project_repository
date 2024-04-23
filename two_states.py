@@ -12,7 +12,7 @@ def run_visa_checker():
     destination_code = get_country_code(destination_country) if destination_country else None
 
     if departure_country and not departure_code:
-        st.error(f"'{departure_country}' is not recognized. Please enter a valid country name.")
+        st.error(f"'{departure_country}' is not recognized. Please enter a vali country name.")
     if destination_country and not destination_code:
         st.error(f"'{destination_country}' is not recognized. Please enter a valid country name.")
 
