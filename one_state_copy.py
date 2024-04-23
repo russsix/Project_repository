@@ -1,6 +1,7 @@
 import streamlit as st
 import requests
 from DataBase_Countries import get_country_code
+from DataBase_Countries import get_country_name
 
 def run_visa_checker():
     st.title('Visa Country Status')
@@ -19,7 +20,8 @@ def run_visa_checker():
             data = response.json()
             if data:
                 st.write("Visa Required Countries:")
-                st.write(', '.join(data.get('vr', {}).get('data', [])))
+                Visa_Required_Countries=', '.join(data.get('vr', {}).get('data', []))
+                st.write (get_country_name(Visa_Required_Countries))
                 st.write("Visa on Arrival Countries:")
                 st.write(', '.join(data.get('voa', {}).get('data', [])))
                 st.write("Visa Free Countries:")
