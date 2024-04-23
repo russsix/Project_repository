@@ -1,13 +1,10 @@
 import streamlit as st
 import requests
-from DataBase_Countries import get_country_code
-from DataBase_Countries import get_country_name
+from DataBase_Countries import get_country_code, get_country_name
 
-def run_visa_status():
+def run_visa_checker():
     st.title('Visa Country Status')
-
     departure_country = st.text_input("Enter your departure country:", key='departure_country')
-
     departure_code = get_country_code(departure_country) if departure_country else None
     
     if departure_country and not departure_code:
@@ -19,6 +16,7 @@ def run_visa_status():
         if response.status_code == 200:
             data = response.json()
             if data:
+                # Visa Required Countries
                 st.write("Visa Required Countries:")
                 visa_required_countries = [get_country_name(code) for code in data.get('vr', {}).get('data', [])]
                 st.write(', '.join(visa_required_countries))
@@ -47,4 +45,4 @@ def run_visa_status():
         else:
             st.error(f"Failed to retrieve data. Status code: {response.status_code}")
 
-run_visa_status()
+run_visa_checker()
