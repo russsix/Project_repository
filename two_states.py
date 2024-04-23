@@ -16,26 +16,17 @@ def run_visa_checker():
     if destination_country and not destination_code:
         st.error(f"'{destination_country}' is not recognized. Please enter a valid country name.")
 
-    if st.button('Check Visa Requirement') and departure_code and destination_code:
+       if st.button('Check Visa Requirement') and departure_code and destination_code:
         url = f'https://rough-sun-2523.fly.dev/api/{departure_code}/{destination_code}'
         response = requests.get(url)
         if response.status_code == 200:
             data = response.json()
-            category = data.get('category', '').lower()
-            
-            if 'VR' in category:
+            visa_required = 'visa required' in data.get('category', '').lower()
+            if visa_required:
                 st.success('A visa is required.')
-            elif 'VOA' in category:
-                st.success('You need to obtain a visa upon arrival.')
-            elif 'VF' in category:
-                st.success('You can enter the country without a visa.')
-            elif 'CB' in category:
-                st.success('Travel is currently banned due to Covid-19 restrictions.')
-            elif 'NA' in category:
-                st.success('No entry is permitted to travelers from your country.')
             else:
-                st.success('The visa requirement for your destination is not clear or is unspecified.')
+                st.info('A visa is not required.')
         else:
             st.error(f"Failed to retrieve data. Status code: {response.status_code}")
-
 run_visa_checker()
+
