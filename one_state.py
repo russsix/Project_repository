@@ -1,11 +1,12 @@
 import streamlit as st
 import requests
-from DataBase_Countries import get_country_code
 
-def destinations(passport_country):
+
+def get_visa_free_destinations(passport_country):
     api_url = f'https://rough-sun-2523.fly.dev/api/{passport_country}'
     response = requests.get(api_url)
     
+   
 def main():
     st.title("Visa-Free Travel Destinations")
     passport_country = st.text_input("Enter your passport country: ")
@@ -20,3 +21,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
