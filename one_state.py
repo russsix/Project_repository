@@ -6,7 +6,7 @@ def get_visa_free_destinations(passport_country):
     api_url = f'https://rough-sun-2523.fly.dev/api/{passport_country}'
     response = requests.get(api_url)
     if response.status_code == 200:
-    result = response.json()
+        result = response.json()
         return result  
     return []
    
