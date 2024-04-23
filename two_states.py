@@ -22,7 +22,11 @@ def run_visa_checker():
         if response.status_code == 200:
             data = response.json()
             if 'VF' in data.get('status', ''):
-                st.success('A visa is not required.')
+                if '' in data.get('dur', ''):
+                    st.success('A visa is not required.')
+                else:
+                    duration = data.get('dur', '')
+                    st.success('A visa is not required up until {duration} days.')
             elif 'VOA' in data.get('status', ''):
                 st.warning ('You need to obtain a visa upon arrival.')
             elif 'VR' in data.get ('status', ''):
