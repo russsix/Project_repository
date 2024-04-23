@@ -8,6 +8,7 @@ def run_visa_checker():
     departure_country = st.text_input("Enter your departure country:", key='departure_country')
     destination_country = st.text_input("Enter your destination country:", key='destination_country')
 
+    # Get the country codes
     departure_code = get_country_code(departure_country) if departure_country else None
     destination_code = get_country_code(destination_country) if destination_country else None
 
@@ -18,18 +19,15 @@ def run_visa_checker():
         st.error(f"'{destination_country}' is not recognized. Please enter a valid country name.")
 
     # Button to check visa requirements
-    if st.button('Check Visa Requirement', disabled=not (departure_code and destination_code)):
-        try:
-            url = f'https://rough-sun-2523.fly.dev/api/{departure_code}/{destination_code}'
-            response = requests.get(url)
-            if response.status_code == 200:
-                data = response.json()
-                visa_required = 'visa required' in data.get('category', '').lower()
-                if visa_required:
-                    st.success('A visa is required.')
-                else:
-                    st.info('A visa is not required.')
+    if st.button('Check Visa Requirement') and departure_code and destination_code:
+        url = f'https://rough-sun-2523.fly.dev/api/{departure_code}/{destination_code}'
+        response = requests.get(url)
+        if response.status_code == 200:
+            data = response.json()
+            visa_required = 'visa required' in data.get('category', '').lower()
+            if visa_required:
+                st.success('A visa is required.')
             else:
-                st.error(f"Failed to retrieve data. Status code: {response.status_code}")
-        except requests.RequestException as e:
-            st.error(f"An error occurred: {e}")
+                st.info('A visa is not required.')
+        else:
+            st.error(f"Failed to retrieve data. Status code: {response.status_code}")
