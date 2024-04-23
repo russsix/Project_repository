@@ -22,18 +22,18 @@ def run_visa_checker():
         if response.status_code == 200:
             data = response.json()
             if 'VF' in data.get('status', ''):
-                if '' in data.get('dur', ''):
-                    st.success('A visa is not required.')
+                duration = data.get('dur', None)
+                if duration:
+                    st.success(f'A visa is not required up until {duration} days.')
                 else:
-                    duration = data.get('dur', '')
-                    st.success('A visa is not required up until {duration} days.')
+                    st.success('A visa is not required.')
             elif 'VOA' in data.get('status', ''):
                 st.warning ('You need to obtain a visa upon arrival.')
             elif 'VR' in data.get ('status', ''):
                 st.error ('A visa is required')
             elif 'CB' in data.get ('status', ''):
                 st.error ('Travel is currently banned due to Covid-19 restrictions.')
-            elif 'NO' in data.get ('status', ''):
+            elif 'NA' in data.get ('status', ''):
                 st.error ('No entry is permitted to travelers from your country.')
             else:
                 st.warning('The visa requirement for your destination is not clear or is unspecified.')
