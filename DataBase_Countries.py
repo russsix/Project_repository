@@ -77,7 +77,7 @@ country_codes={
     "Faroe Islands": "fo",
     "France": "fr",
     "Gabon": "ga",
-    "United Kingdom OF Great Britain Snd Northern Ireland": "gb",
+    "United Kingdom OF Great Britain And Northern Ireland": "gb",
     "Grenada": "gd",
     "Georgia": "ge",
     "French Guiana": "gf",
