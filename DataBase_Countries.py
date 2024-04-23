@@ -259,6 +259,7 @@ def get_country_code(country_name):
 
 country_names = {code: country for country, code in country_codes.items()}
 def get_country_name(code):
-    return country_names.get(code, "Unknown Country")
-    
-st.write (country_names)
+    normalized_code = code.strip().upper()
+    return country_names.get(normalized_code, "Unknown Country")
+
+st.write ('hi')
