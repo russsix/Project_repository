@@ -8,15 +8,7 @@ def destinations(passport_country):
     api_url = f'https://rough-sun-2523.fly.dev/api/{passport_country}'
     response = requests.get(api_url)
     
-    if response.status_code == 200:
-        visa_free_destinations = response.json()
-        if isinstance(visa_free_destinations, list):
-            for dest in visa_free_destinations:
-                for key, val in dest.items():
-                    if key in Data_Object_Type:
-                        dest[key] = Data_Object_Type[key](val)
-            return visa_free_destinations
-    return []
+   
 
 def main():
     st.title("Visa-Free Travel Destinations")
