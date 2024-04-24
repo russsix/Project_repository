@@ -126,6 +126,7 @@ def extract_flight_details(flight_search_results):
             'departure': flight['legs'][0]['departure'],
             'arrival': flight['legs'][0]['arrival'],
             'carriersName': [carrier['name'] for carrier in flight['legs'][0]['carriers']['marketing']],
+            'carriersLogo': [carrier['logoUrl'] for carrier in flight['legs'][0]['carriers']['marketing']],  
             'flightNumber': flight['legs'][0]['segments'][0]['flightNumber'],
             'isCancellationAllowed': flight['farePolicy']['isCancellationAllowed'],
             'isPartiallyRefundable': flight['farePolicy']['isPartiallyRefundable']
