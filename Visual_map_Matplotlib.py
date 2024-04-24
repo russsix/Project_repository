@@ -1,7 +1,5 @@
 import streamlit as st
-import folium
 import matplotlib.pyplot as plt
-import sqlite3
 from matplotlib.colors import ListedColormap
 from DataBase_Countries import get_country_code, get_country_name
 from one_state_copy import run_visa_country_status
