@@ -47,4 +47,3 @@ def run_visa_checker():
             st.error(f"Failed to retrieve data. Status code: {response.status_code}")
 
 run_visa_checker()
-
