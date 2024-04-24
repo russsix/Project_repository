@@ -1,29 +1,23 @@
 import streamlit as st
-import requests
 import geopandas as gpd
 import matplotlib.pyplot as plt
 from DataBase_Countries import get_country_code, get_country_name
 
-def get_country_color(country_code, visa_status):
-    if visa_status == 'vf':
-        return 'green'  # Visa Free
-    elif visa_status == 'voa':
-        return 'orange'  # Visa on Arrival
-    elif visa_status == 'vr':
-        return 'red'  # Visa Required
-    else:
-        return 'gray'  # No data
+def get_country_color(country_code, visa_data):
+    if country_code in visa_data:
+        visa_status = visa_data[country_code]
+        if visa_status == 'vf':
+            return 'green'  # Visa Free
+        elif visa_status == 'voa':
+            return 'orange'  # Visa on Arrival
+        elif visa_status == 'vr':
+            return 'red'  # Visa Required
+    return 'gray'  # No data
 
 def plot_map(visa_data):
     world = gpd.read_file(gpd.datasets.get_path('naturalearth_lowres'))
 
-    for index, row in world.iterrows():
-        country_code = get_country_code(row['name'])
-        if country_code in visa_data:
-            visa_status = visa_data[country_code]
-            world.loc[index, 'color'] = get_country_color(country_code, visa_status)
-        else:
-            world.loc[index, 'color'] = 'gray'
+    world['color'] = world['iso_a3'].apply(lambda x: get_country_color(x, visa_data))
 
     fig, ax = plt.subplots(figsize=(15, 10))
     world.plot(ax=ax, color=world['color'])
