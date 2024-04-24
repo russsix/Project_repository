@@ -17,7 +17,6 @@ def run_visa_checker():
         if response.status_code == 200:
             data = response.json()
             if data:
-                # ... (Code for displaying visa information as per the existing code)
   
                 visa_map = folium.Map(location=[0, 0], zoom_start=2)
                 
