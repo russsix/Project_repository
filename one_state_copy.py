@@ -5,14 +5,14 @@ from DataBase_Countries import get_country_code, get_country_name
 
 def run_visa_country_status():
     st.title('Visa Country Status')
-    departure_country = st.text_input("Enter your departure country:", key='departure_country')
-    departure_code = get_country_code(departure_country) if departure_country else None
+    passport_country = st.text_input("Enter your departure country:", key='departure_country')
+    passport_code = get_country_code(passport_country) if passport_country else None
     
-    if departure_country and not departure_code:
-        st.error(f"'{departure_country}' is not recognized. Please enter a valid country name.")
+    if passport_country and not passport_code:
+        st.error(f"'{passport_country}' is not recognized. Please enter a valid country name.")
 
-    if st.button('Visa Country Status') and departure_code:
-        url = f'https://rough-sun-2523.fly.dev/api/{departure_code}'
+    if st.button('Visa Country Status') and passport_code:
+        url = f'https://rough-sun-2523.fly.dev/api/{passport_code}'
         response = requests.get(url)
         data = response.json()
         if data:
