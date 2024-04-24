@@ -135,7 +135,7 @@ def extract_flight_details(flight_search_results):
     
     return flight_details
 
-# Assuming `response_json` is the JSON object you have from the API response
+
 # Example usage:
 flight_data = extract_flight_details(flight_search_results)
 for flight in flight_data:
