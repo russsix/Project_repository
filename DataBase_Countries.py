@@ -260,4 +260,4 @@ def get_country_code(country_name):
 country_names = {code: country for country, code in country_codes.items()}
 def get_country_name(code):
     normalized_code = code.strip().lower()
-    return country_names.get(normalized_code, 'Rachele')
+    return country_names.get(normalized_code, 'None')
