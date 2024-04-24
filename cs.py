@@ -1,8 +1,7 @@
 import streamlit as st
 from two_states import run_visa_checker
+from one_state.copy import run_visa_country_status
 
-def run_visa_free_destinations():
-    st.sidebar.write("Visa-Free Destinations feature coming soon.")
 
 def run_flight_comparison():
     st.sidebar.write("Flight Comparison feature coming soon.")
@@ -14,6 +13,6 @@ app_option = st.sidebar.selectbox('Choose a feature:',
 if app_option == 'Two States':
     run_visa_checker()
 elif app_option == 'Visa-Free Destinations':
-    run_visa_free_destinations()
+    run_visa_country_status()
 elif app_option == 'Flight Comparison':
     run_flight_comparison()
