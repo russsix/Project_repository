@@ -1,6 +1,7 @@
 import streamlit as st
 import requests
 import folium
+from DataBase_Countries import get_country_code, get_country_name
 
 def get_visa_free_destinations(passport_country):
     api_url = f'https://rough-sun-2523.fly.dev/api/{passport_country}'
@@ -42,9 +43,11 @@ def main():
             ).add_to(m)
 
         # Display the map
-        st.markdown(m._repr_html_(), unsafe_allow_html=True)
+        m.save("map.html")
+        st.markdown(open("map.html").read(),unsafe_allow_html=True)
 
 if __name__ == "__main__":
     main()
+
 
 
