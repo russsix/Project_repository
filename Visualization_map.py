@@ -59,7 +59,7 @@ def get_color(country):
         return 'red'
 
 # Add countries to the map
-for country in ['USA', 'Canada', 'Mexico', 'France', 'Germany', 'Japan']:
+for country in contries:
     folium.CircleMarker(
         location=[0, 0],
         radius=5,
