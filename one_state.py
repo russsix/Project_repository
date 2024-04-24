@@ -1,5 +1,6 @@
 import streamlit as st
 import requests
+import folium
 
 
 def get_visa_free_destinations(passport_country):
