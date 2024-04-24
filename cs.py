@@ -1,6 +1,6 @@
 import streamlit as st
 from two_states import run_visa_checker
-from one_state.copy import run_visa_country_status
+from one_state_copy import run_visa_country_status
 
 
 def run_flight_comparison():
