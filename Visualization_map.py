@@ -5,6 +5,8 @@ from DataBase_Countries import get_country_code, get_country_name
 from one_state_copy import run_visa_country_status
 
 
+run_visa_status()
+
 # Create a base map
 m = folium.Map(location=[0, 0], zoom_start=2)
 
