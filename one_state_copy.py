@@ -1,5 +1,4 @@
 import streamlit as st
-import folium
 import requests
 from DataBase_Countries import get_country_code, get_country_name
 
