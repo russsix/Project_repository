@@ -18,7 +18,7 @@ def get_color(country):
         return 'red'
 
 # Add countries to the map
-for country in contries:
+for country in DataBase_Countries:
     folium.CircleMarker(
         location=[0, 0],
         radius=5,
