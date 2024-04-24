@@ -2,7 +2,7 @@ import streamlit as st
 import requests
 from DataBase_Countries import get_country_code, get_country_name
 
-def run_visa_checker():
+def run_visa_country_status():
     st.title('Visa Country Status')
     departure_country = st.text_input("Enter your departure country:", key='departure_country')
     departure_code = get_country_code(departure_country) if departure_country else None
@@ -45,4 +45,4 @@ def run_visa_checker():
         else:
             st.error(f"Failed to retrieve data. Status code: {response.status_code}")
 
-run_visa_checker()
+run_visa_country_status()
