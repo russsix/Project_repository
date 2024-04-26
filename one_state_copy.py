@@ -5,12 +5,16 @@ from DataBase_Countries import get_country_code, get_country_name
 
 def run_visa_country_status():
     st.title('Visa Country Status')
+
+    #insert passport country and get country code
     passport_country = st.text_input("Enter your departure country:", key='departure_country')
     passport_code = get_country_code(passport_country) if passport_country else None
     
+    #does the passport country exist?
     if passport_country and not passport_code:
         st.error(f"'{passport_country}' is not recognized. Please enter a valid country name.")
 
+    #print all the Visa required countries, the visa on arrival countries, the visa-free countries, the covid-ban countries and the no admission countries
     if st.button('Visa Country Status') and passport_code:
         url = f'https://rough-sun-2523.fly.dev/api/{passport_code}'
         response = requests.get(url)
