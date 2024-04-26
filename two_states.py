@@ -28,7 +28,7 @@ def run_visa_checker():
                 else:
                     st.success('A visa is not required.')
             elif 'VOA' in data.get('status', ''):
-                st.warning ('You need to obtain a visa upon arrival.')
+                st.warning ('You will obtain a visa upon arrival.')
             elif 'VR' in data.get ('status', ''):
                 st.error ('A visa is required')
             elif 'CB' in data.get ('status', ''):
