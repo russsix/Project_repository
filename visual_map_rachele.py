@@ -22,5 +22,3 @@ view_state = pdk.ViewState(latitude=0, longitude=0, zoom=1)
 # Render the map
 st.pydeck_chart(pdk.Deck(layers=[layer], initial_view_state=view_state))
 
-import sys
-st.write(sys.executable)
