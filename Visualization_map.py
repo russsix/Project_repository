@@ -1,45 +1,46 @@
 import streamlit as st
 import pydeck as pdk
 import geopandas as gpd
-import pandas as pd
 
 # Load geographical data from the GeoJSON file
 geo_data = gpd.read_file(r"D:\Download\global_states.geojson")
 
-# Define the color for the United States and a default color
-us_color = [255, 0, 0, 160]  # Red with some transparency
-default_color = [34, 139, 34, 160]  # Dark green with some transparency
+# Define a function to apply color based on the country
+def color_countries(features):
+    if features['properties']['ADMIN'] == 'United States of America':
+        # Color the United States in red
+        return [255, 0, 0]
+    else:
+        # Use a neutral color for other countries
+        return [128, 128, 128]
 
-# Create a new column 'color' in the GeoDataFrame to store the RGBA values
-geo_data['color'] = geo_data.apply(lambda x: us_color if x['ADMIN'] == 'United States of America' else default_color, axis=1).tolist()
+# Use GeoPandas to iterate over the GeoDataFrame and apply colors
+geo_data['color'] = geo_data.apply(lambda row: color_countries(row['geometry']), axis=1)
 
-# Convert GeoDataFrame to Pydeck data format
+# Convert GeoDataFrame to JSON
 geojson = geo_data.__geo_interface__
 
-# Define the Pydeck layer as a GeoJsonLayer using the 'color' column for the fill color
+# Create the Pydeck layer
 layer = pdk.Layer(
-    'GeoJsonLayer',
+    "GeoJsonLayer",
     geojson,
-    opacity=0.8,
+    opacity=0.7,
     stroked=False,
     filled=True,
-    extruded=False,
-    get_fill_color='properties.color',
+    get_fill_color='color',
 )
 
 # Set the initial view state
 view_state = pdk.ViewState(
-    latitude=0,  # Center on the US
+    latitude=0,
     longitude=0,
-    zoom=1  # Adjust zoom to show the US prominently
+    zoom=1
 )
 
-# Create the deck
-deck = pdk.Deck(
+# Render the Pydeck map with the custom layer
+st.pydeck_chart(pdk.Deck(
     layers=[layer],
     initial_view_state=view_state,
-    map_style='mapbox://styles/mapbox/light-v9'
-)
-
-# Render the map in Streamlit
-st.pydeck_chart(deck)
+    # Use a map style that includes country labels
+    map_style='mapbox://styles/mapbox/light-v10'
+))
