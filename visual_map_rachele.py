@@ -32,7 +32,7 @@ layer = pdk.Layer(
 view_state = pdk.ViewState(
     latitude=0, 
     longitude=0, 
-    zoom=1
+    zoom=0
 )
 
 # Render the map with the custom colors
