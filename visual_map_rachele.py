@@ -1,3 +1,5 @@
+import sys
+st.write(sys.executable)
 import streamlit as st
 import pydeck as pdk
 import geopandas as gpd
