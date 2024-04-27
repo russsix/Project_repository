@@ -3,7 +3,7 @@ import pydeck as pdk
 import geopandas as gpd
 
 # Load geographical data
-geo_data = gpd.read_file("path/to/your/global_states.geojson")
+geo_data = gpd.read_file(r"D:\Download\global_states.geojson")
 
 # Define the Pydeck layer as a GeoJsonLayer
 layer = pdk.Layer(
@@ -21,4 +21,3 @@ view_state = pdk.ViewState(latitude=0, longitude=0, zoom=1)
 
 # Render the map
 st.pydeck_chart(pdk.Deck(layers=[layer], initial_view_state=view_state))
-
