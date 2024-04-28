@@ -2,6 +2,9 @@
 import streamlit as st
 import requests
 from DataBase_Countries import get_country_code, get_country_name
+import geopandas as gpd
+import matplotlib.pyplot as plt
+
 
 def get_country_color(country_code, visa_data):
     if country_code in visa_data:
