@@ -26,6 +26,7 @@ def plot_map(visa_data):
     st.pyplot(fig)
 
 def run_visa_country_status():
+    visa_data = {}  # Initialize visa_data as an empty dictionary
     st.title('Visa Country Status')
     passport_country = st.text_input("Enter your departure country:", key='departure_country')
     passport_code = get_country_code(passport_country) if passport_country else None
@@ -38,14 +39,39 @@ def run_visa_country_status():
         response = requests.get(url)
         data = response.json()
         if data:
-            visa_data = {}
-            visa_required_countries = data.get('vr', {}).get('data', [])
-            visa_on_arrival_countries = data.get('voa', {}).get('data', [])
-            visa_free_countries = data.get('vf', {}).get('data', [])
-            for country_code in visa_required_countries:
+            # Visa Required Countries
+            st.write("Visa Required Countries:")
+            visa_required_countries = [get_country_name(code) for code in data.get('vr', {}).get('data', [])]
+            st.write(', '.join(visa_required_countries))
+
+            # Visa on Arrival Countries
+            st.write("Visa on Arrival Countries:")
+            visa_on_arrival_countries = [get_country_name(code) for code in data.get('voa', {}).get('data', [])]
+            st.write(', '.join(visa_on_arrival_countries))
+
+            # Visa Free Countries
+            st.write("Visa Free Countries:")
+            visa_free_countries = [get_country_name(code) for code in data.get('vf', {}).get('data', [])]
+            st.write(', '.join(visa_free_countries))
+
+            # Covid Ban Countries
+            if data.get('cb', {}).get('data'):
+                st.write("Covid Ban Countries:")
+                covid_ban_countries = [get_country_name(code) for code in data.get('cb', {}).get('data', [])]
+                st.write(', '.join(covid_ban_countries))
+
+            # No Admission Countries
+            if data.get('na', {}).get('data'):
+                st.write("No Admission Countries:")
+                no_admission_countries = [get_country_name(code) for code in data.get('na', {}).get('data', [])]
+                st.write(', '.join(no_admission_countries))
+                   
+             for country_code in visa_required_countries:
                 visa_data[country_code] = 'vr'
+                 
             for country_code in visa_on_arrival_countries:
                 visa_data[country_code] = 'voa'
+                
             for country_code in visa_free_countries:
                 visa_data[country_code] = 'vf'
 
