@@ -49,6 +49,6 @@ def run_visa_country_status():
             for country_code in visa_free_countries:
                 visa_data[country_code] = 'vf'
 
-            plot_map(visa_data)
+plot_map(visa_data)
 
 run_visa_country_status()
