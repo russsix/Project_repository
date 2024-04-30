@@ -4,9 +4,6 @@ import geopandas as gpd
 import matplotlib.pyplot as plt
 from DataBase_Countries import country_codes, get_country_code
 
-def get_country_code(country_name):
-    return country_codes.get(country_name.strip().title(), None)
-
 def fetch_visa_status_data(passport_code):
     url = f'https://rough-sun-2523.fly.dev/api/{passport_code}'
     response = requests.get(url)
