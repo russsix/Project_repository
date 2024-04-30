@@ -3,6 +3,8 @@ import requests
 import geopandas as gpd
 import matplotlib.pyplot as plt
 import sys
+from streamlit_bokeh_events import streamlit_bokeh_events
+from bokeh.plotting import figure
 
 sys.path.append('D:\\Download')
 from DataBase_Countries import country_codes, get_country_code, get_country_name
@@ -36,25 +38,36 @@ def plot_map(visa_data):
     # Use 'ADMIN' as the country name column in your GeoDataFrame
     world['color'] = world['ADMIN'].apply(lambda x: color_for_visa_status(x, visa_data))
 
-    fig, ax = plt.subplots(1, figsize=(15, 10))
-    world.plot(ax=ax, color=world['color'], linewidth=0.5, edgecolor='black')
-    ax.set_facecolor('none')  # Set background to transparent
-    ax.axis('off')
-    ax.set_title('World Map by Visa Requirement Status')
+    # Create a Bokeh figure
+    p = figure(plot_height=600, plot_width=800, toolbar_location=None, tools="")
+    p.axis.visible = False
 
-    # Make the figure background transparent
-    fig.patch.set_facecolor('none')
-    fig.patch.set_alpha(0)
+    # Add polygons for each country
+    for country, geometry in zip(world['ADMIN'], world['geometry']):
+        x, y = geometry.exterior.xy
+        p.patches([x], [y], fill_color=color_for_visa_status(country, visa_data), line_color="black")
 
-    # Make the axis background transparent
-    ax.patch.set_facecolor('none')
+    # Add hover tool to display country names
+    hover = p.hover
+    hover.tooltips = [("Country", "@country")]
+    hover.point_policy = "follow_mouse"
 
-    # Add country names as annotations
-    for country, geom in zip(world['ADMIN'], world['geometry']):
-        x, y = geom.centroid.x, geom.centroid.y
-        ax.text(x, y, country, fontsize=8, ha='center', va='center')
+    # Add country names as text annotations
+    for country, geometry in zip(world['ADMIN'], world['geometry']):
+        centroid = geometry.centroid
+        p.text(x=[centroid.x], y=[centroid.y], text=[country], text_font_size="8pt", text_align="center", text_baseline="middle", text_color="black", text_alpha=0)
 
-    st.pyplot(fig)
+    # Add zoom event handler
+    event_result = streamlit_bokeh_events(bokeh_plot=p, events="PAN", key="pan")
+    if event_result:
+        # If a pan event occurs (zoom in), show country names
+        p.text_alpha = 1
+    else:
+        # Otherwise, hide country names
+        p.text_alpha = 0
+
+    # Show the Bokeh plot
+    st.bokeh_chart(p)
 
 def run_visa_country_status():
     st.title('Visa Country Status')
