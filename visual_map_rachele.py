@@ -2,7 +2,6 @@ import streamlit as st
 import requests
 import geopandas as gpd
 import matplotlib.pyplot as plt
-from DataBase_Countries import get_country_code
 from one_state_copy import run_visa_country_status
 
 # Set up Streamlit
