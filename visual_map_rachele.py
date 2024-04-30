@@ -11,28 +11,28 @@ def fetch_visa_status_data(passport_code):
     """Fetch visa status data from the API."""
     url = f'https://rough-sun-2523.fly.dev/api/{passport_code}'
     response = requests.get(url)
-    if response.ok:
-        return response.json()
-    else:
-        st.error('Failed to retrieve data from the API')
-        return {}
+    return response.json()
 
-def get_country_color(country_iso, visa_data):
-    """Return color based on visa requirement."""
-    if country_iso in visa_data['vr']:
-        return 'red'  # Visa Required
-    elif country_iso in visa_data['voa']:
-        return 'yellow'  # Visa on Arrival
-    elif country_iso in visa_data['vf']:
-        return 'green'  # Visa Free
-    return 'gray'  # Default to gray if no data
+visa_required_countries = [get_country_name(code) for code in data.get('vr', {}).get('data', [])]
+visa_on_arrival_countries = [get_country_name(code) for code in data.get('voa', {}).get('data', [])]
+visa_free_countries = [get_country_name(code) for code in data.get('vf', {}).get('data', [])]
+
+def color_for_visa_status(country):
+    if country in visa_required_countries:
+        return 'red'
+    elif country in visa_on_arrival_countries:
+        return 'yellow'
+    elif country in visa_free_countries:
+        return 'green'
+    else:
+        return 'grey'  
 
 def plot_map(visa_data):
     """Plot the world map with countries colored based on visa requirement status."""
     world = gpd.read_file("D:\\Download\\global_states.geojson")
 
     # Use 'ADM0_A3' as the country code column in your GeoDataFrame
-    world['color'] = world['ADM0_A3'].apply(lambda x: get_country_color(x, visa_data))
+    world['color'] = world['ADMIN'].apply(color_for_visa_status)
 
     fig, ax = plt.subplots(1, figsize=(15, 10))
     world.plot(ax=ax, color=world['color'], linewidth=0.5, edgecolor='black')
