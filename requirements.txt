@@ -3,3 +3,4 @@ folium
 requests
 geopandas
 plotly-express
+pandas
