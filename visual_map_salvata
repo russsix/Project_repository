@@ -1,7 +1,7 @@
 import streamlit as st
 import requests
 import geopandas as gpd
-import matplotlib.pyplot as plt
+import plotly.express as px
 import sys
 
 sys.path.append('D:\\Download')
@@ -29,33 +29,6 @@ def color_for_visa_status(country, visa_data):
     else:
         return 'grey'  
 
-def plot_map(visa_data):
-    """Plot the world map with countries colored based on visa requirement status."""
-    world = gpd.read_file("D:\\Download\\global_states.geojson")
-
-    # Use 'ADMIN' as the country name column in your GeoDataFrame
-    world['color'] = world['ADMIN'].apply(lambda x: color_for_visa_status(x, visa_data))
-
-    fig, ax = plt.subplots(1, figsize=(15, 10))
-    world.plot(ax=ax, color=world['color'], linewidth=0.5, edgecolor='black')
-    ax.set_facecolor('none')  # Set background to transparent
-    ax.axis('off')
-    ax.set_title('World Map by Visa Requirement Status')
-
-    # Make the figure background transparent
-    fig.patch.set_facecolor('none')
-    fig.patch.set_alpha(0)
-
-    # Make the axis background transparent
-    ax.patch.set_facecolor('none')
-
-    # Add country names as annotations
-    for country, geom in zip(world['ADMIN'], world['geometry']):
-        x, y = geom.centroid.x, geom.centroid.y
-        ax.text(x, y, country, fontsize=8, ha='center', va='center')
-
-    st.pyplot(fig)
-
 def run_visa_country_status():
     st.title('Visa Country Status')
     selected_country = st.selectbox('Select your passport country:', list(country_codes.keys()))
@@ -64,7 +37,37 @@ def run_visa_country_status():
     if st.button('Show Visa Requirements Map'):
         data = fetch_visa_status_data(passport_code)
         if data:
-            plot_map(data)
+            # Load world map data
+            world = gpd.read_file("D:\\Download\\global_states.geojson")
+
+            # Assign color to countries based on visa status
+            world['color'] = world['ADMIN'].apply(lambda x: color_for_visa_status(x, data))
+
+            # Plot the world map with Plotly
+            fig = px.choropleth(world, 
+                                 geojson=world.geometry, 
+                                 locations=world.index, 
+                                 color='color',
+                                 hover_name='ADMIN',  # Country name will be displayed when hovering
+                                 projection='natural earth')  # Use natural earth projection for better appearance
+
+            # Update map layout
+            fig.update_geos(showcountries=True, 
+                            showcoastlines=False, 
+                            showland=True, 
+                            showocean=True, 
+                            showlakes=False, 
+                            showrivers=False,
+                            fitbounds='locations')
+
+            # Make the background transparent
+            fig.update_layout(
+                plot_bgcolor='rgba(0,0,0,0)',  # Transparent background
+                paper_bgcolor='rgba(0,0,0,0)'  # Transparent background
+            )
+
+            # Show the plotly figure
+            st.plotly_chart(fig)
         else:
             st.error("No visa data available for the selected country.")
 
