@@ -1,13 +1,13 @@
 import streamlit as st
 import requests
-from DataBase_Countries import get_country_code
+from DataBase_Countries import get_country_code, country_codes
 
 def run_visa_checker():
     st.title('Visa Requirement Checker')
 
     #insert departure and destination country
-    departure_country = st.text_input("Enter your departure country:", key='departure_country')
-    destination_country = st.text_input("Enter your destination country:", key='destination_country')
+    departure_country = st.selectbox('Select your departure country:', list(country_codes.keys()))
+    destination_country = st.selectbox('Select your destination country:', list(country_codes.keys()))
 
     #get the names of the country codes
     departure_code = get_country_code(departure_country) if departure_country else None
