@@ -40,14 +40,26 @@ def plot_map(visa_data):
     world = gpd.read_file("D:\\Download\\global_states.geojson")
     world['Visa Status'] = world['ADMIN'].apply(lambda x: color_for_visa_status(x, visa_data))
 
-    fig = px.choropleth(world, geojson=world.geometry, locations=world.index, color='Visa Status',
-                        color_discrete_map={'Unknown': 'grey', 'Visa Required': 'red', 'Visa On Arrival': 'yellow', 'Visa Free': 'green', 'COVID-19 Ban': 'blue', 'No Admission': 'black'},
-                        projection='natural earth',
-                        labels={'Visa Status':'Visa Requirement Status'},
-                        title='World Map by Visa Requirement Status',
-                        hover_name='ADMIN',
-                        hover_data={'ADMIN': False},
-                        )
+    # Define color map with 'Unknown' last
+    color_discrete_map = {
+        'Visa Required': 'red',
+        'Visa On Arrival': 'yellow',
+        'Visa Free': 'green',
+        'COVID-19 Ban': 'blue',
+        'No Admission': 'black',
+        'Unknown': 'grey'
+    }
+
+    fig = px.choropleth(
+        world, geojson=world.geometry, locations=world.index,
+        color='Visa Status',
+        color_discrete_map=color_discrete_map,
+        projection='natural earth',
+        labels={'Visa Status': 'Visa Requirement Status'},
+        title='World Map by Visa Requirement Status',
+        hover_name='ADMIN',
+        hover_data={'ADMIN': False},
+    )
     # Update layout for transparent background
     fig.update_geos(visible=False, bgcolor='rgba(0,0,0,0)')
     fig.update_layout(
