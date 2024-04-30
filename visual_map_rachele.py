@@ -3,6 +3,7 @@ import requests
 import geopandas as gpd
 import plotly.express as px
 import sys
+import pandas as pd
 
 sys.path.append('D:\\Download')
 from DataBase_Countries import country_codes, get_country_code, get_country_name
@@ -40,27 +41,30 @@ def plot_map(visa_data):
     world = gpd.read_file("D:\\Download\\global_states.geojson")
     world['Visa Status'] = world['ADMIN'].apply(lambda x: color_for_visa_status(x, visa_data))
 
-    # Define color map with 'Unknown' last
-    color_discrete_map = {
-        'Visa Required': 'red',
-        'Visa On Arrival': 'yellow',
-        'Visa Free': 'green',
-        'COVID-19 Ban': 'blue',
-        'No Admission': 'black',
-        'Unknown': 'grey'
-    }
+    # Ensure the ordering of 'Visa Status' categories
+    category_order = ['Visa Required', 'Visa On Arrival', 'Visa Free', 'COVID-19 Ban', 'No Admission', 'Unknown']
+    world['Visa Status'] = pd.Categorical(world['Visa Status'], categories=category_order, ordered=True)
 
     fig = px.choropleth(
-        world, geojson=world.geometry, locations=world.index,
+        world, 
+        geojson=world.geometry, 
+        locations=world.index, 
         color='Visa Status',
-        color_discrete_map=color_discrete_map,
+        color_discrete_map={
+            'Visa Required': 'red',
+            'Visa On Arrival': 'yellow',
+            'Visa Free': 'green',
+            'COVID-19 Ban': 'blue',
+            'No Admission': 'black',
+            'Unknown': 'grey'
+        },
         projection='natural earth',
         labels={'Visa Status': 'Visa Requirement Status'},
         title='World Map by Visa Requirement Status',
-        hover_name='ADMIN',
-        hover_data={'ADMIN': False},
+        hover_name='ADMIN',  # Show country name
+        hover_data={'Visa Status': True}  # Include visa status in the hover
     )
-    # Update layout for transparent background
+    # Update layout for transparent background and no index in hover data
     fig.update_geos(visible=False, bgcolor='rgba(0,0,0,0)')
     fig.update_layout(
         paper_bgcolor='rgba(0,0,0,0)',
