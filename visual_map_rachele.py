@@ -43,9 +43,14 @@ def plot_map(visa_data):
     p.axis.visible = False
 
     # Add polygons for each country
-    for country, geometry in zip(world['ADMIN'], world['geometry']):
-        x, y = geometry.exterior.xy
-        p.patches([x], [y], fill_color=color_for_visa_status(country, visa_data), line_color="black")
+    for geom, color in zip(world['geometry'], world['color']):
+        if geom.geom_type == 'Polygon':
+            x, y = geom.exterior.xy
+            p.patch(x, y, fill_color=color, line_color="black")
+        elif geom.geom_type == 'MultiPolygon':
+            for poly in geom:
+                x, y = poly.exterior.xy
+                p.patch(x, y, fill_color=color, line_color="black")
 
     # Add hover tool to display country names
     hover = p.hover
@@ -53,9 +58,10 @@ def plot_map(visa_data):
     hover.point_policy = "follow_mouse"
 
     # Add country names as text annotations
-    for country, geometry in zip(world['ADMIN'], world['geometry']):
-        centroid = geometry.centroid
-        p.text(x=[centroid.x], y=[centroid.y], text=[country], text_font_size="8pt", text_align="center", text_baseline="middle", text_color="black", text_alpha=0)
+    for country, geom in zip(world['ADMIN'], world['geometry']):
+        if geom.geom_type == 'Polygon':
+            centroid = geom.centroid
+            p.text(x=[centroid.x], y=[centroid.y], text=[country], text_font_size="8pt", text_align="center", text_baseline="middle", text_color="black", text_alpha=0)
 
     # Add zoom event handler
     event_result = streamlit_bokeh_events(bokeh_plot=p, events="PAN", key="pan")
