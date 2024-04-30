@@ -2,61 +2,57 @@ import streamlit as st
 import requests
 import geopandas as gpd
 import matplotlib.pyplot as plt
-from DataBase_Countries import country_codes, get_country_code
+import sys
+
+sys.path.append('D:\\Download')
+from DataBase_Countries import country_codes, get_country_code, get_country_name
 
 def fetch_visa_status_data(passport_code):
+    """Fetch visa status data from the API."""
     url = f'https://rough-sun-2523.fly.dev/api/{passport_code}'
     response = requests.get(url)
-    return response.json() if response.ok else None
+    if response.ok:
+        return response.json()
+    else:
+        st.error('Failed to retrieve data from the API')
+        return {}
 
-def visa_map():
-    st.title('World Map by Visa Requirement Status')
+def get_country_color(country_iso, visa_data):
+    """Return color based on visa requirement."""
+    if country_iso in visa_data['vr']:
+        return 'red'  # Visa Required
+    elif country_iso in visa_data['voa']:
+        return 'yellow'  # Visa on Arrival
+    elif country_iso in visa_data['vf']:
+        return 'green'  # Visa Free
+    return 'gray'  # Default to gray if no data
 
-    # User selects a country from a dropdown populated with available countries
+def plot_map(visa_data):
+    """Plot the world map with countries colored based on visa requirement status."""
+    world = gpd.read_file("D:\\Download\\global_states.geojson")
+
+    # Use 'ADM0_A3' as the country code column in your GeoDataFrame
+    world['color'] = world['ADM0_A3'].apply(lambda x: get_country_color(x, visa_data))
+
+    fig, ax = plt.subplots(1, figsize=(15, 10))
+    world.plot(ax=ax, color=world['color'], linewidth=0.5, edgecolor='black')
+    ax.set_facecolor('none')  # Set background to transparent
+    ax.axis('off')
+    ax.set_title('World Map by Visa Requirement Status')
+    st.pyplot(fig)
+
+def run_visa_country_status():
+    st.title('Visa Country Status')
     selected_country = st.selectbox('Select your passport country:', list(country_codes.keys()))
+    passport_code = get_country_code(selected_country)
 
     if st.button('Show Visa Requirements Map'):
-        passport_code = get_country_code(selected_country)
-        if passport_code:
-            visa_data = fetch_visa_status_data(passport_code)
-            if visa_data:
-                # Load geographical data from the GeoJSON file
-                geo_df = gpd.read_file("D:\\Download\\global_states.geojson")
-
-                # Prepare lists of countries based on visa requirement
-                visa_required_countries = [c for c in visa_data.get('vr', {}).get('data', [])]
-                visa_on_arrival_countries = [c for c in visa_data.get('voa', {}).get('data', [])]
-                visa_free_countries = [c for c in visa_data.get('vf', {}).get('data', [])]
-
-                # Define a function to return the color based on the visa status
-                def color_for_visa_status(country):
-                    if country in visa_required_countries:
-                        return 'red'
-                    elif country in visa_on_arrival_countries:
-                        return 'yellow'
-                    elif country in visa_free_countries:
-                        return 'green'
-                    else:
-                        return 'grey'  # Default color if status is unknown
-
-                # Apply the color to each country using the function
-                geo_df['color'] = geo_df['ADMIN'].apply(color_for_visa_status)
-
-                # Plot the GeoDataFrame
-                fig, ax = plt.subplots(1, 1, figsize=(15, 10))
-                geo_df.plot(ax=ax, color=geo_df['color'])
-
-                # Remove axis for a cleaner look
-                ax.axis('off')
-
-                # Set a title for the map
-                ax.set_title('World Map by Visa Requirement Status')
-
-                # Show the plot using Streamlit
-                st.pyplot(fig)
-            else:
-                st.error("Failed to retrieve visa data. Please try again.")
+        data = fetch_visa_status_data(passport_code)
+        if data:
+            # Prepare visa data dictionary with ISO codes as keys and visa status as values
+            visa_data = {code: status for status, codes in data.items() for code in codes}
+            plot_map(visa_data)
         else:
-            st.error("Invalid country selected. Please choose a valid country from the list.")
+            st.error("No visa data available for the selected country.")
 
-visa_map()
+run_visa_country_status()
