@@ -1,57 +1,65 @@
 import streamlit as st
-import pydeck as pdk
+import requests
 import geopandas as gpd
-import pandas as pd
+import matplotlib.pyplot as plt
 
-def set_country_colors(geo_dataframe, country_column, color_map):
-    """
-    Adds a 'color' column to the GeoDataFrame based on the country name.
+def get_country_code(country):
+    # Dummy function to return a country code, replace with actual logic as needed
+    country_codes = {'Switzerland': 'CH'}
+    return country_codes.get(country, '')
 
-    Parameters:
-    - geo_dataframe: A GeoDataFrame containing the geographical data.
-    - country_column: The name of the column in the GeoDataFrame that contains country names.
-    - color_map: A dictionary mapping country names to color values.
+def get_country_name(code):
+    # Dummy function to return country names from codes, replace with actual logic
+    country_names = {'CH': 'Switzerland'}
+    return country_names.get(code, '')
 
-    Returns:
-    - A GeoDataFrame with a new 'color' column.
-    """
-    # Initialize a 'color' column with default colors
-    geo_dataframe['color'] = [color_map.get('default')] * len(geo_dataframe)
+# Set up Streamlit
+st.title('Visa Requirement Information')
 
-    for country, color in color_map.items():
-        geo_dataframe.loc[geo_dataframe[country_column] == country, 'color'] = color
+# User selects a country
+country_list = ['Switzerland']  # Update with actual list of countries
+selected_country = st.selectbox('Select your passport country:', country_list)
 
-    return geo_dataframe
+if selected_country:
+    passport_code = get_country_code(selected_country)
 
-# Example usage:
+    # Request visa information from the API
+    url = f'https://rough-sun-2523.fly.dev/api/{passport_code}'
+    response = requests.get(url)
+    data = response.json()
 
-# Load your geographical data into a GeoDataFrame
-geo_df = gpd.read_file(r"D:\Download\global_states.geojson")
+    # Prepare lists of countries based on visa requirement
+    visa_required_countries = [get_country_name(code) for code in data.get('vr', {}).get('data', [])]
+    visa_on_arrival_countries = [get_country_name(code) for code in data.get('voa', {}).get('data', [])]
+    visa_free_countries = [get_country_name(code) for code in data.get('vf', {}).get('data', [])]
 
-# Define a color map for countries
-color_map = {
-    'United States of America': [255, 0, 0, 160],  # Red for the US
-    'default': [34, 139, 34, 160]  # Green for other countries
-}
+    # Load geographical data from the GeoJSON file
+    geo_df = gpd.read_file("D:\\Download\\global_states.geojson")
 
-# Apply the color settings to the GeoDataFrame
-geo_df = set_country_colors(geo_df, 'ADMIN', color_map)
+    # Define a function to return the color based on the visa status
+    def color_for_visa_status(country):
+        if country in visa_required_countries:
+            return 'red'
+        elif country in visa_on_arrival_countries:
+            return 'yellow'
+        elif country in visa_free_countries:
+            return 'green'
+        else:
+            return 'grey'  # Default color if status is unknown
 
-# Convert the GeoDataFrame to a format that Pydeck understands
-geojson = geo_df.__geo_interface__
+    # Apply the color to each country using the function
+    geo_df['color'] = geo_df['ADMIN'].apply(color_for_visa_status)
 
-# Create the Pydeck layer with custom colors
-layer = pdk.Layer(
-    "GeoJsonLayer",
-    geojson,
-    get_fill_color='properties.color',
-    pickable=True,
-    auto_highlight=True
-)
+    # Plot the GeoDataFrame
+    fig, ax = plt.subplots(1, 1, figsize=(15, 10))
+    geo_df.plot(ax=ax, color=geo_df['color'])
 
-# Set the initial view state
-view_state = pdk.ViewState(latitude=0, longitude=0, zoom=1)
+    # Remove axis for a cleaner look
+    ax.axis('off')
 
-# Create and display the Pydeck chart
-r = pdk.Deck(layers=[layer], initial_view_state=view_state, map_style='mapbox://styles/mapbox/light-v9')
-st.pydeck_chart(r)
+    # Set a title for the map
+    ax.set_title('World Map by Visa Requirement Status')
+
+    # Show the plot using Streamlit
+    st.pyplot(fig)
+
