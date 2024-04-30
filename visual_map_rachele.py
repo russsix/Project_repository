@@ -11,7 +11,8 @@ def fetch_visa_status_data(passport_code):
     """Fetch visa status data from the API."""
     url = f'https://rough-sun-2523.fly.dev/api/{passport_code}'
     response = requests.get(url)
-    return response.json()
+    data = response.json()
+    return data
 
 visa_required_countries = [get_country_name(code) for code in data.get('vr', {}).get('data', [])]
 visa_on_arrival_countries = [get_country_name(code) for code in data.get('voa', {}).get('data', [])]
