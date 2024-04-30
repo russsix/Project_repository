@@ -2,7 +2,7 @@ import streamlit as st
 import requests
 import geopandas as gpd
 import matplotlib.pyplot as plt
-from Database_Countries import country_codes, get_country_code
+from DataBase_Countries import country_codes, get_country_code
 
 def get_country_code(country_name):
     return country_codes.get(country_name.strip().title(), None)
