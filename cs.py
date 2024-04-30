@@ -1,7 +1,7 @@
 #cs.py
 import streamlit as st
 from two_states import run_visa_checker
-from visual_map_rachele import run_visa_country_status
+from one_state import run_visa_country_status
 
 
 def run_flight_comparison():
