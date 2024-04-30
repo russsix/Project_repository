@@ -1,5 +1,7 @@
 #cs.py
 import streamlit as st
+import sys
+sys.path.append('D:\\Download')
 from two_states import run_visa_checker
 from one_state import run_visa_country_status
 

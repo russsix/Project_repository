@@ -1,5 +1,7 @@
 import streamlit as st
 import requests
+import sys
+sys.path.append('D:\\Download')
 from DataBase_Countries import get_country_code, country_codes
 
 def run_visa_checker():
