@@ -49,7 +49,7 @@ def plot_map(visa_data):
     fig.update_layout(coloraxis_colorbar=dict(
         title='Visa Requirement',
         tickvals=[0, 1, 2, 3],
-        ticktext=['Unknown', 'Visa Required', 'Visa On Arrival', 'Visa Free']
+        ticktext=['Visa Required', 'Visa On Arrival', 'Visa Free', 'Uknown']
     ))
     fig.update_layout(coloraxis_showscale=False)
 
