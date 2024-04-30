@@ -2,18 +2,26 @@ import streamlit as st
 import requests
 import geopandas as gpd
 import matplotlib.pyplot as plt
-from DataBase_Countries import get_country_code, get_country_name
+from DataBase_Countries import get_country_code
 from one_state_copy import run_visa_country_status
 
 # Set up Streamlit
 st.title('World Map by Visa Requirement Status')
 
-# User selects a country
-def visa_map ()
-    run_visa_country_status ()
+# Load geographical data from the GeoJSON file
+geo_df = gpd.read_file("D:\\Download\\global_states.geojson")
 
-    # Load geographical data from the GeoJSON file
-    geo_df = gpd.read_file("D:\\Download\\global_states.geojson")
+def fetch_visa_status_data(passport_country):
+    # Fetch visa status data using the provided function and return lists
+    return run_visa_country_status(passport_country)
+
+def visa_map():
+    # User selects a country from a dropdown populated with available countries
+    country_list = list(geo_df['ADMIN'])  # Example to populate the dropdown with countries from the GeoJSON
+    selected_country = st.selectbox('Select your passport country:', country_list)
+
+    # Retrieve visa status data
+    visa_required_countries, visa_on_arrival_countries, visa_free_countries, _, _ = fetch_visa_status_data(selected_country)
 
     # Define a function to return the color based on the visa status
     def color_for_visa_status(country):
@@ -42,3 +50,4 @@ def visa_map ()
     # Show the plot using Streamlit
     st.pyplot(fig)
 
+visa_map()
