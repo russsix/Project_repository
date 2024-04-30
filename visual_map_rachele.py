@@ -41,6 +41,11 @@ def plot_map(visa_data):
     ax.set_facecolor('none')  # Set background to transparent
     ax.axis('off')
     ax.set_title('World Map by Visa Requirement Status')
+
+    # Remove the figure frame and background
+    ax.set_frame_on(False)
+    ax.patch.set_visible(False)
+    
     st.pyplot(fig)
 
 def run_visa_country_status():
