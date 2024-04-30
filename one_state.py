@@ -47,7 +47,7 @@ def plot_map(visa_data):
 
     # Sort the dataframe by 'Visa Status' to ensure correct legend order
     world.sort_values('Visa Status', inplace=True)
-
+    
     fig = px.choropleth(
         world, 
         geojson=world.geometry, 
@@ -86,7 +86,7 @@ def plot_map(visa_data):
 
 def run_visa_country_status():
     st.title('Visa Country Status')
-    selected_country = st.selectbox("Select your country:", [""] + list(country_codes.values()), key='one_state_country')
+    selected_country = st.selectbox('Select your passport country:', list(country_codes.keys()))
     passport_code = get_country_code(selected_country)
 
     if st.button('Show Visa Requirements Map'):
@@ -97,4 +97,3 @@ def run_visa_country_status():
             st.error("No visa data available for the selected country.")
 
 run_visa_country_status()
-#sources: https://docs.streamlit.io/develop/api-reference/charts/st.plotly_chart
