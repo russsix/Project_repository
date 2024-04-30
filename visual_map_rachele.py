@@ -2,22 +2,14 @@ import streamlit as st
 import requests
 import geopandas as gpd
 import matplotlib.pyplot as plt
+from DataBase_Countries import get_country_code, get_country_name
 
-def get_country_code(country):
-    # Dummy function to return a country code, replace with actual logic as needed
-    country_codes = {'Switzerland': 'CH'}
-    return country_codes.get(country, '')
-
-def get_country_name(code):
-    # Dummy function to return country names from codes, replace with actual logic
-    country_names = {'CH': 'Switzerland'}
-    return country_names.get(code, '')
 
 # Set up Streamlit
 st.title('Visa Requirement Information')
 
 # User selects a country
-country_list = ['Switzerland']  # Update with actual list of countries
+country_list = ['Switzerland, Italy']  # Update with actual list of countries
 selected_country = st.selectbox('Select your passport country:', country_list)
 
 if selected_country:
