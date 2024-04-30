@@ -2,4 +2,4 @@ streamlit
 folium
 requests
 geopandas
-matplotlib
+plotly-express

@@ -13,12 +13,6 @@ def run_visa_checker():
     departure_code = get_country_code(departure_country) if departure_country else None
     destination_code = get_country_code(destination_country) if destination_country else None
 
-    #does the country exist?
-    if departure_country and not departure_code:
-        st.error(f"'{departure_country}' is not recognized. Please enter a valid country name.")
-    if destination_country and not destination_code:
-        st.error(f"'{destination_country}' is not recognized. Please enter a valid country name.")
-
     #print visa requirements between the two (visa-free, visa on arrival, visa required, covid-ban, no admission)
     if st.button('Check Visa Requirement') and departure_code and destination_code:
         url = f'https://rough-sun-2523.fly.dev/api/{departure_code}/{destination_code}'
