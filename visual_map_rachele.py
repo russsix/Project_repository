@@ -19,41 +19,49 @@ def color_for_visa_status(country, visa_data):
     visa_required_countries = [get_country_name(code) for code in visa_data.get('vr', {}).get('data', [])]
     visa_on_arrival_countries = [get_country_name(code) for code in visa_data.get('voa', {}).get('data', [])]
     visa_free_countries = [get_country_name(code) for code in visa_data.get('vf', {}).get('data', [])]
+    covid_ban_countries = [get_country_name(code) for code in visa_data.get('covid_ban', {}).get('data', [])]
+    no_admission_countries = [get_country_name(code) for code in visa_data.get('no_admission', {}).get('data', [])]
 
-    if country in visa_required_countries:
+    if country in covid_ban_countries:
+        return 'COVID-19 Ban'
+    elif country in no_admission_countries:
+        return 'No Admission'
+    elif country in visa_required_countries:
         return 'Visa Required'
     elif country in visa_on_arrival_countries:
         return 'Visa On Arrival'
     elif country in visa_free_countries:
         return 'Visa Free'
     else:
-        return 'Unknown'  
+        return 'Unknown'
 
 def plot_map(visa_data):
     """Plot the world map with countries colored based on visa requirement status."""
     world = gpd.read_file("D:\\Download\\global_states.geojson")
-
-    # Use 'ADMIN' as the country name column in your GeoDataFrame
     world['Visa Status'] = world['ADMIN'].apply(lambda x: color_for_visa_status(x, visa_data))
 
     fig = px.choropleth(world, geojson=world.geometry, locations=world.index, color='Visa Status',
-                        color_discrete_map={'Unknown': 'grey', 'Visa Required': 'red', 'Visa On Arrival': 'yellow', 'Visa Free': 'green'},
+                        color_discrete_map={'Unknown': 'grey', 'Visa Required': 'red', 'Visa On Arrival': 'yellow', 'Visa Free': 'green', 'COVID-19 Ban': 'blue', 'No Admission': 'black'},
                         projection='natural earth',
                         labels={'Visa Status':'Visa Requirement Status'},
                         title='World Map by Visa Requirement Status',
                         hover_name='ADMIN',
                         hover_data={'ADMIN': False},
                         )
-    fig.update_geos(visible=False)
-    fig.update_layout(legend_title_text='Visa Requirement')
-    fig.update_layout(coloraxis_colorbar=dict(
-        title='Visa Requirement',
-        tickvals=[0, 1, 2, 3],
-        ticktext=['Visa Required', 'Visa On Arrival', 'Visa Free', 'Uknown']
-    ))
-    fig.update_layout(coloraxis_showscale=False)
-
-    fig.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)')  # Set background to transparent
+    # Update layout for transparent background
+    fig.update_geos(visible=False, bgcolor='rgba(0,0,0,0)')
+    fig.update_layout(
+        paper_bgcolor='rgba(0,0,0,0)',
+        plot_bgcolor='rgba(0,0,0,0)',
+        geo=dict(
+            landcolor='rgba(0,0,0,0)',
+            showland=True,
+            showcountries=True,
+            countrycolor='white'
+        ),
+        legend_title_text='Visa Status',
+        coloraxis_showscale=True  # Enable the color scale
+    )
 
     st.plotly_chart(fig)
 
