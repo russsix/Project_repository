@@ -3,49 +3,36 @@ import streamlit as st
 import requests
 from DataBase_Countries import get_country_code, get_country_name
 
-def run_visa_country_status():
-    st.title('Visa Country Status')
-
-    #insert passport country and get country code
-    passport_country = st.text_input("Enter your departure country:", key='departure_country')
-    passport_code = get_country_code(passport_country) if passport_country else None
-    
-    #does the passport country exist?
+def run_visa_country_status(passport_country):
+    passport_code = get_country_code(passport_country)
     if passport_country and not passport_code:
         st.error(f"'{passport_country}' is not recognized. Please enter a valid country name.")
+        return None, None, None  # Return None if the country code is not found
 
-    #print all the Visa required countries, the visa on arrival countries, the visa-free countries, the covid-ban countries and the no admission countries
-    if st.button('Visa Country Status') and passport_code:
-        url = f'https://rough-sun-2523.fly.dev/api/{passport_code}'
-        response = requests.get(url)
-        data = response.json()
-        if data:
-            # Visa Required Countries
-            st.write("Visa Required Countries:")
-            visa_required_countries = [get_country_name(code) for code in data.get('vr', {}).get('data', [])]
-            st.write(', '.join(visa_required_countries))
+    url = f'https://rough-sun-2523.fly.dev/api/{passport_code}'
+    response = requests.get(url)
+    data = response.json()
 
-            # Visa on Arrival Countries
-            st.write("Visa on Arrival Countries:")
-            visa_on_arrival_countries = [get_country_name(code) for code in data.get('voa', {}).get('data', [])]
-            st.write(', '.join(visa_on_arrival_countries))
+    if data:
+        visa_required_countries = [get_country_name(code) for code in data.get('vr', {}).get('data', [])]
+        visa_on_arrival_countries = [get_country_name(code) for code in data.get('voa', {}).get('data', [])]
+        visa_free_countries = [get_country_name(code) for code in data.get('vf', {}).get('data', [])]
+        return visa_required_countries, visa_on_arrival_countries, visa_free_countries
 
-            # Visa Free Countries
-            st.write("Visa Free Countries:")
-            visa_free_countries = [get_country_name(code) for code in data.get('vf', {}).get('data', [])]
-            st.write(', '.join(visa_free_countries))
+    return None, None, None  # Return None for all lists if there is no data
 
-            # Covid Ban Countries
-            if data.get('cb', {}).get('data'):
-                st.write("Covid Ban Countries:")
-                covid_ban_countries = [get_country_name(code) for code in data.get('cb', {}).get('data', [])]
-                st.write(', '.join(covid_ban_countries))
+# Streamlit interface to input country and get visa status
+def visa_status_interface():
+    st.title('Visa Country Status')
+    passport_country = st.text_input("Enter your passport country:", key='passport_country')
 
-            # No Admission Countries
-            if data.get('na', {}).get('data'):
-                st.write("No Admission Countries:")
-                no_admission_countries = [get_country_name(code) for code in data.get('na', {}).get('data', [])]
-                st.write(', '.join(no_admission_countries))
-        
+    if st.button('Get Visa Status') and passport_country:
+        required, on_arrival, free = run_visa_country_status(passport_country)
+        if required is not None:
+            st.write("Visa Required Countries:", ', '.join(required))
+            st.write("Visa on Arrival Countries:", ', '.join(on_arrival))
+            st.write("Visa Free Countries:", ', '.join(free))
+        else:
+            st.write("No visa information available for this country.")
 
-run_visa_country_status()
+visa_status_interface()

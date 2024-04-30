@@ -3,27 +3,14 @@ import requests
 import geopandas as gpd
 import matplotlib.pyplot as plt
 from DataBase_Countries import get_country_code, get_country_name
-
+from one_state_copy import run_visa_country_status
 
 # Set up Streamlit
-st.title('Visa Requirement Information')
+st.title('World Map by Visa Requirement Status')
 
 # User selects a country
-country_list = ['Switzerland, Italy']  # Update with actual list of countries
-selected_country = st.selectbox('Select your passport country:', country_list)
-
-if selected_country:
-    passport_code = get_country_code(selected_country)
-
-    # Request visa information from the API
-    url = f'https://rough-sun-2523.fly.dev/api/{passport_code}'
-    response = requests.get(url)
-    data = response.json()
-
-    # Prepare lists of countries based on visa requirement
-    visa_required_countries = [get_country_name(code) for code in data.get('vr', {}).get('data', [])]
-    visa_on_arrival_countries = [get_country_name(code) for code in data.get('voa', {}).get('data', [])]
-    visa_free_countries = [get_country_name(code) for code in data.get('vf', {}).get('data', [])]
+def visa_map ()
+    run_visa_country_status ()
 
     # Load geographical data from the GeoJSON file
     geo_df = gpd.read_file("D:\\Download\\global_states.geojson")
