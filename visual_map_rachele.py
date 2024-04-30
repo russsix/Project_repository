@@ -45,6 +45,9 @@ def plot_map(visa_data):
     category_order = ['Visa Required', 'Visa On Arrival', 'Visa Free', 'COVID-19 Ban', 'No Admission', 'Unknown']
     world['Visa Status'] = pd.Categorical(world['Visa Status'], categories=category_order, ordered=True)
 
+    # Sort the dataframe by 'Visa Status' to ensure correct legend order
+    world.sort_values('Visa Status', inplace=True)
+    
     fig = px.choropleth(
         world, 
         geojson=world.geometry, 
