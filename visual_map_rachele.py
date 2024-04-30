@@ -37,7 +37,7 @@ def plot_map(visa_data):
     world['Visa Status'] = world['ADMIN'].apply(lambda x: color_for_visa_status(x, visa_data))
 
     fig = px.choropleth(world, geojson=world.geometry, locations=world.index, color='Visa Status',
-                        color_discrete_map={'Visa Required': 'red', 'Visa On Arrival': 'yellow', 'Visa Free': 'green'},
+                        color_discrete_map={'Unknown': 'grey', 'Visa Required': 'red', 'Visa On Arrival': 'yellow', 'Visa Free': 'green'},
                         projection='natural earth',
                         labels={'Visa Status':'Visa Requirement Status'},
                         title='World Map by Visa Requirement Status',
@@ -48,10 +48,12 @@ def plot_map(visa_data):
     fig.update_layout(legend_title_text='Visa Requirement')
     fig.update_layout(coloraxis_colorbar=dict(
         title='Visa Requirement',
-        tickvals=[0, 1, 2],
+        tickvals=[0, 1, 2, 3],
         ticktext=['Unknown', 'Visa Required', 'Visa On Arrival', 'Visa Free']
     ))
     fig.update_layout(coloraxis_showscale=False)
+
+    fig.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)')  # Set background to transparent
 
     st.plotly_chart(fig)
 
