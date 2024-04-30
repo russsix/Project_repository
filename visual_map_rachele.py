@@ -39,7 +39,7 @@ def plot_map(visa_data):
     world['color'] = world['ADMIN'].apply(lambda x: color_for_visa_status(x, visa_data))
 
     # Create a Bokeh figure
-    p = figure(plot_height=600, plot_width=800, toolbar_location=None, tools="")
+    p = figure(width=800, height=600, toolbar_location=None, tools="")
     p.axis.visible = False
 
     # Add polygons for each country
