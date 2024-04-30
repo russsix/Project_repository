@@ -42,12 +42,18 @@ def plot_map(visa_data):
     ax.axis('off')
     ax.set_title('World Map by Visa Requirement Status')
 
+    # Make the figure background transparent
     fig.patch.set_facecolor('none')
     fig.patch.set_alpha(0)
 
     # Make the axis background transparent
     ax.patch.set_facecolor('none')
-    
+
+    # Add country names as annotations
+    for country, geom in zip(world['ADMIN'], world['geometry']):
+        x, y = geom.centroid.x, geom.centroid.y
+        ax.text(x, y, country, fontsize=8, ha='center', va='center')
+
     st.pyplot(fig)
 
 def run_visa_country_status():
