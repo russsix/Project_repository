@@ -1,7 +1,7 @@
 import streamlit as st
 import requests
 import geopandas as gpd
-import matplotlib.pyplot as plt
+import plotly.express as px
 import sys
 
 sys.path.append('D:\\Download')
@@ -29,46 +29,45 @@ def color_for_visa_status(country, visa_data):
     else:
         return 'grey'  
 
-def plot_map(visa_data, zoom_level):
-    """Plot the world map with countries colored based on visa requirement status."""
-    world = gpd.read_file("D:\\Download\\global_states.geojson")
-
-    # Use 'ADMIN' as the country name column in your GeoDataFrame
-    world['color'] = world['ADMIN'].apply(lambda x: color_for_visa_status(x, visa_data))
-
-    # Create a new figure and axis
-    fig, ax = plt.subplots(figsize=(10, 6))
-
-    # Plot the world map with colored countries
-    world.plot(ax=ax, color=world['color'], edgecolor='black')
-
-    # Set plot limits based on zoom level
-    ax.set_xlim([-180 + zoom_level, 180 - zoom_level])
-    ax.set_ylim([-90 + zoom_level, 90 - zoom_level])
-
-    # Hide axes and set title
-    ax.axis('off')
-    ax.set_title('World Map by Visa Requirement Status')
-
-    # Display country names only when zoomed in
-    if zoom_level < 100:
-        for _, row in world.iterrows():
-            ax.text(row.geometry.centroid.x, row.geometry.centroid.y, row['ADMIN'], fontsize=6, ha='center', va='center')
-
-    # Display the plot
-    st.pyplot(fig)
-
 def run_visa_country_status():
     st.title('Visa Country Status')
     selected_country = st.selectbox('Select your passport country:', list(country_codes.keys()))
     passport_code = get_country_code(selected_country)
 
-    zoom_level = st.slider('Zoom Level', min_value=0, max_value=180, value=0, step=10)
-
     if st.button('Show Visa Requirements Map'):
         data = fetch_visa_status_data(passport_code)
         if data:
-            plot_map(data, zoom_level)
+            # Load world map data
+            world = gpd.read_file("D:\\Download\\global_states.geojson")
+
+            # Assign color to countries based on visa status
+            world['color'] = world['ADMIN'].apply(lambda x: color_for_visa_status(x, data))
+
+            # Plot the world map with Plotly
+            fig = px.choropleth(world, 
+                                 geojson=world.geometry, 
+                                 locations=world.index, 
+                                 color='color',
+                                 hover_name='ADMIN',  # Country name will be displayed when hovering
+                                 projection='natural earth')  # Use natural earth projection for better appearance
+
+            # Update map layout
+            fig.update_geos(showcountries=True, 
+                            showcoastlines=False, 
+                            showland=True, 
+                            showocean=True, 
+                            showlakes=False, 
+                            showrivers=False,
+                            fitbounds='locations')
+
+            # Make the background transparent
+            fig.update_layout(
+                plot_bgcolor='rgba(0,0,0,0)',  # Transparent background
+                paper_bgcolor='rgba(0,0,0,0)'  # Transparent background
+            )
+
+            # Show the plotly figure
+            st.plotly_chart(fig)
         else:
             st.error("No visa data available for the selected country.")
 
