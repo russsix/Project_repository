@@ -33,24 +33,34 @@ def visa_status_interface():
         if required is None:  # No data was fetched
             st.write("No visa information available for this country.")
         else:
-            all_empty = True
+            # Displaying visa required countries or "None" if list is empty
             if required:
                 st.write("Visa Required Countries:", ', '.join(required))
-                all_empty = False
+            else:
+                st.write("Visa Required Countries: None")
+
+            # Displaying visa on arrival countries or "None" if list is empty
             if on_arrival:
                 st.write("Visa on Arrival Countries:", ', '.join(on_arrival))
-                all_empty = False
+            else:
+                st.write("Visa on Arrival Countries: None")
+
+            # Displaying visa free countries or "None" if list is empty
             if free:
                 st.write("Visa Free Countries:", ', '.join(free))
-                all_empty = False
+            else:
+                st.write("Visa Free Countries: None")
+
+            # Displaying covid ban countries or "None" if list is empty
             if covid_banned:
                 st.write("Covid Ban Countries:", ', '.join(covid_banned))
-                all_empty = False
+            else:
+                st.write("Covid Ban Countries: None")
+
+            # Displaying no admission countries or "None" if list is empty
             if no_admit:
                 st.write("No Admission Countries:", ', '.join(no_admit))
-                all_empty = False
-            
-            if all_empty:
-                st.write("None")  # Display "None" only once if all lists are empty
+            else:
+                st.write("No Admission Countries: None")
 
 visa_status_interface()
