@@ -86,7 +86,7 @@ def plot_map(visa_data):
 
 def run_visa_country_status():
     st.title('Visa Country Status')
-    selected_country = st.selectbox('Select your passport country:', list(country_codes.keys()))
+    selected_country = st.selectbox('Select your passport country:', list(country_codes.keys()), key = 'one_state_selected_country')
     passport_code = get_country_code(selected_country)
 
     if st.button('Show Visa Requirements Map'):
