@@ -97,3 +97,4 @@ def run_visa_country_status():
             st.error("No visa data available for the selected country.")
 
 run_visa_country_status()
+st.write ('hi')
