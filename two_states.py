@@ -3,12 +3,15 @@ import requests
 import sys
 sys.path.append('D:\\Download')
 from DataBase_Countries import get_country_code, country_codes
+from datetime import datetime
+
 
 def run_visa_checker(prefix =""):
     st.title('Visa Requirement Checker')
 
-    departure_country = st.selectbox("Select your departure country:", [""] + list(country_codes.keys()), key=f'{prefix}_two_states_departure_country')
-    destination_country = st.selectbox("Select your destination country:", [""] + list(country_codes.keys()), key=f'{prefix}_two_states_destination_country')
+    unique_key = datetime.now().strftime("%Y%m%d%H%M%S")
+    departure_country = st.selectbox("Select your departure country:", [""] + list(country_codes.keys()), key=f'{unique_key}_two_states_departure_country')
+    destination_country = st.selectbox("Select your destination country:", [""] + list(country_codes.keys()), key=f'{unique_key}_two_states_destination_country')
 
     #get the names of the country codes
     departure_code = get_country_code(departure_country) if departure_country else None
