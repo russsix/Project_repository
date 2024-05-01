@@ -18,7 +18,7 @@ def run_visa_checker(prefix =""):
     destination_code = get_country_code(destination_country) if destination_country else None
 
     #print visa requirements between the two (visa-free, visa on arrival, visa required, covid-ban, no admission)
-    if st.button('Check Visa Requirement') and departure_code and destination_code:
+    if st.button('Check Visa Requirement', key=f'visa_check_button_{unique_key}') and departure_code and destination_code:
         url = f'https://rough-sun-2523.fly.dev/api/{departure_code}/{destination_code}'
         response = requests.get(url)
         if response.status_code == 200:
