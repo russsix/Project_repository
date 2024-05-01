@@ -84,9 +84,9 @@ def plot_map(visa_data):
 
     st.plotly_chart(fig)
 
-def run_visa_country_status():
+def run_visa_country_status(prefix =""):
     st.title('Visa Country Status')
-    selected_country = st.selectbox('Select your passport country:', list(country_codes.keys()), key = 'one_state_selected_country')
+    selected_country = st.selectbox('Select your passport country:', list(country_codes.keys()), key = f'{prefix}_one_state_selected_country')
     passport_code = get_country_code(selected_country)
 
     if st.button('Show Visa Requirements Map'):
