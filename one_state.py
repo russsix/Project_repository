@@ -97,4 +97,5 @@ def run_visa_country_status(prefix =""):
         else:
             st.error("No visa data available for the selected country.")
 
-run_visa_country_status()
+if __name__ == "__main__":
+    run_visa_country_status()
