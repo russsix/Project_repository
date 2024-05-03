@@ -4,6 +4,7 @@ Additional file downloads
     Download the File: Visit (https://www.naturalearthdata.com/downloads/110m-cultural-vectors/110m-admin-0-countries/) and download the file to your local machine
     Place the File: Move the downloaded file to the `data/` directory within the cloned project repository
     Transform the file to json format 
+    import geopandas
         gdf = gpd.read_file(r"D:\Download\ne_110m_admin_0_countries.shp")
 
     # Convert to GeoJSON and save to a file
