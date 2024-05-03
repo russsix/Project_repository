@@ -518,7 +518,6 @@ country_codes = {"Andorra": "ad",
     "Zimbabwe": "zw"
 }
 
-# Rimuovi le nazioni non riconosciute dall'API
 country_codes = remove_unrecognized_countries(country_codes)
 
 # Stampiamo i paesi riconosciuti
