@@ -272,7 +272,7 @@ def validate_country_code_with_api(country_code):
     
 def get_valid_countries():
     valid_countries = {}
-    for country, code in country_codes.items():
+    for country, code in country_codes_internet.items():
         if validate_country_code_with_api(code):
             valid_countries[country] = code
     return valid_countries
