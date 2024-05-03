@@ -16,9 +16,8 @@ file_name = 'country-code.csv'
 country_codes = load_country_codes(file_name)
 
     
-normalized_country_codes = {key: value for key, value in country_codes.items()}
 def get_country_code(country_name):
-    return normalized_country_codes.get(country_name, None)
+    return country_codes.get(country_name, None)
 
 country_names = {code: country for country, code in country_codes.items()}
 def get_country_name(code):
