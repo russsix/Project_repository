@@ -89,10 +89,10 @@ def run_visa_country_status(prefix =""):
     st.title('Visa Country Status')
     
     unique_key = datetime.now().strftime("%Y%m%d%H%M%S")
-    selected_country = st.selectbox('Select your passport country:', list(country_codes.keys()), key = f'{unique_key}_one_state_selected_country')
+    selected_country = st.selectbox('Select your passport country:', list(country_codes.keys()), key = 'one_state_selected_country')
     passport_code = get_country_code(selected_country)
 
-    if st.button('Show Visa Requirements Map'):
+    if st.button('Show Visa Requirements Map', key=f'visa_check_button_{unique_key}'):
         data = fetch_visa_status_data(passport_code)
         if data:
             plot_map(data)
