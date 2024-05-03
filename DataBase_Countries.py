@@ -241,7 +241,7 @@ country_codes={
     "Venezuela, Bolivarian Republic of": "ve",
     "Virgin Islands (British)": "vg",
     "Virgin Islands (U.S.)": "vi",
-    "Viet Nam": "vn",
+    "Vietnam": "vn",
     "Vanuatu": "vu",
     "Wallis and Futuna": "wf",
     "Samoa": "ws",
@@ -507,7 +507,7 @@ country_codes = {"Andorra": "ad",
     "Venezuela, Bolivarian Republic of": "ve",
     "Virgin Islands (British)": "vg",
     "Virgin Islands (U.S.)": "vi",
-    "Viet Nam": "vn",
+    "Vietnam": "vn",
     "Vanuatu": "vu",
     "Wallis and Futuna": "wf",
     "Samoa": "ws",
@@ -520,7 +520,6 @@ country_codes = {"Andorra": "ad",
 
 country_codes = remove_unrecognized_countries(country_codes)
 
-# Stampiamo i paesi riconosciuti
 print("Paesi riconosciuti dall'API:")
 for country, code in country_codes.items():
     print(f"{country}: {code}")
