@@ -5,7 +5,6 @@ import plotly.express as px
 import sys
 import pandas as pd
 
-sys.path.append('rachelemantero/Project_repository/')
 from DataBase_Countries import country_codes, get_country_code, get_country_name
 
 def fetch_visa_status_data(passport_code):
