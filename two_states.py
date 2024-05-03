@@ -4,7 +4,7 @@ import requests
 import sys
 sys.path.append('D:\\Download')
 from DataBase_Countries import get_country_code, country_codes
-from datetime import datetime
+
 
 
 def run_visa_checker():
@@ -41,5 +41,6 @@ def run_visa_checker():
                 st.warning('The visa requirement for your destination is not clear or is unspecified.')
         else:
             st.error(f"Failed to retrieve data. Status code: {response.status_code}")
-run_visa_checker()
 
+if __name__ == "__main__":
+    run_visa_checker()
