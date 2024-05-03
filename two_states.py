@@ -2,7 +2,7 @@
 import streamlit as st
 import requests
 import sys
-sys.path.append('D:\\Download')
+sys.path.append('rachelemantero/Project_repository/one_state.py')
 from DataBase_Countries import get_country_code, country_codes
 
 

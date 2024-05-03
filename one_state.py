@@ -5,7 +5,7 @@ import plotly.express as px
 import sys
 import pandas as pd
 
-sys.path.append('D:\\Download')
+sys.path.append('rachelemantero/Project_repository/')
 from DataBase_Countries import country_codes, get_country_code, get_country_name
 
 def fetch_visa_status_data(passport_code):
@@ -38,7 +38,7 @@ def color_for_visa_status(country, visa_data):
 
 def plot_map(visa_data):
     """Plot the world map with countries colored based on visa requirement status."""
-    world = gpd.read_file("D:\\Download\\global_states.geojson")
+    world = gpd.read_file("rachelemantero/Project_repository/global_states.geojson") 
     world['Visa Status'] = world['ADMIN'].apply(lambda x: color_for_visa_status(x, visa_data))
 
     # Ensure the ordering of 'Visa Status' categories
