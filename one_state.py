@@ -4,7 +4,6 @@ import geopandas as gpd
 import plotly.express as px
 import sys
 import pandas as pd
-import uuid
 
 sys.path.append('D:\\Download')
 from DataBase_Countries import country_codes, get_country_code, get_country_name
@@ -85,14 +84,12 @@ def plot_map(visa_data):
 
     st.plotly_chart(fig)
 
-def run_visa_country_status(prefix =""):
+def run_visa_country_status():
     st.title('Visa Country Status')
-    
-    unique_key = str(uuid.uuid4())
     selected_country = st.selectbox('Select your passport country:', list(country_codes.keys()), key = 'one_state_selected_country')
     passport_code = get_country_code(selected_country)
 
-    if st.button('Show Visa Requirements Map', key=f'visa_check_button_{unique_key}'):
+    if st.button('Show Visa Requirements Map'):
         data = fetch_visa_status_data(passport_code)
         if data:
             plot_map(data)
