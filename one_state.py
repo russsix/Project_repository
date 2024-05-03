@@ -84,8 +84,9 @@ def plot_map(visa_data):
 
     st.plotly_chart(fig)
 
-def run_visa_country_status():
+def run_visa_country_status(prefix =""):
     st.title('Visa Country Status')
+    
     selected_country = st.selectbox('Select your passport country:', list(country_codes.keys()))
     passport_code = get_country_code(selected_country)
 
