@@ -4,12 +4,13 @@ import sys
 sys.path.append('D:\\Download')
 from DataBase_Countries import get_country_code, country_codes
 from datetime import datetime
+import uuid
 
 
 def run_visa_checker(prefix =""):
     st.title('Visa Requirement Checker')
 
-    unique_key = datetime.now().strftime("%Y%m%d%H%M%S")
+    unique_key = str(uuid.uuid4())
     departure_country = st.selectbox("Select your departure country:", [""] + list(country_codes.keys()), key=f'{unique_key}_two_states_departure_country')
     destination_country = st.selectbox("Select your destination country:", [""] + list(country_codes.keys()), key=f'{unique_key}_two_states_destination_country')
 
@@ -18,7 +19,7 @@ def run_visa_checker(prefix =""):
     destination_code = get_country_code(destination_country) if destination_country else None
 
     #print visa requirements between the two (visa-free, visa on arrival, visa required, covid-ban, no admission)
-    if st.button('Check Visa Requirement', key=f'visa_check_button_{unique_key}') and departure_code and destination_code:
+    if st.button('Check Visa Requirement', key=f'visa_check_button_{unique_key}'):
         url = f'https://rough-sun-2523.fly.dev/api/{departure_code}/{destination_code}'
         response = requests.get(url)
         if response.status_code == 200:
