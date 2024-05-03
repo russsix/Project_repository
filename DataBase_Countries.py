@@ -1,6 +1,8 @@
 #DataBase_Countries
 import streamlit as st
-country_codes={
+import requests
+
+country_codes_internet={
     "Andorra": "ad",
     "United Arab Emirates": "ae",
     "Afghanistan": "af",
@@ -252,6 +254,33 @@ country_codes={
     "Zimbabwe": "zw"
 }
 
+
+def validate_country_code_with_api(country_code):
+    """Check if the API accepts the country code by sending a test request."""
+    test_url = f"https://rough-sun-2523.fly.dev/api/{country_code}"
+    try:
+        response = requests.get(test_url)
+        if response.status_code == 200:
+            # Assuming the API returns a non-error status code for valid countries
+            return True
+        else:
+            # Log or handle unexpected response status
+            return False
+    except requests.RequestException as e:
+        # Handle exceptions like network problems
+        return False
+    
+def get_valid_countries():
+    valid_countries = {}
+    for country, code in country_codes.items():
+        if validate_country_code_with_api(code):
+            valid_countries[country] = code
+    return valid_countries
+
+# Store only the valid countries as per API response
+country_codes = get_valid_countries()
+
+    
 normalized_country_codes = {key.lower(): value for key, value in country_codes.items()}
 def get_country_code(country_name):
     normalized_name = country_name.strip().lower()
