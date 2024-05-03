@@ -16,11 +16,11 @@ def fetch_visa_status_data(passport_code):
 
 def color_for_visa_status(country, visa_data):
     """Assign color based on visa requirement status."""
-    visa_required_countries = [get_country_name(code) for code in visa_data.get('vr', {}).get('data', [])]
-    visa_on_arrival_countries = [get_country_name(code) for code in visa_data.get('voa', {}).get('data', [])]
-    visa_free_countries = [get_country_name(code) for code in visa_data.get('vf', {}).get('data', [])]
-    covid_ban_countries = [get_country_name(code) for code in visa_data.get('covid_ban', {}).get('data', [])]
-    no_admission_countries = [get_country_name(code) for code in visa_data.get('no_admission', {}).get('data', [])]
+    visa_required_countries = [get_country_name(code) for code in visa_data.get('VR', {}).get('data', [])]
+    visa_on_arrival_countries = [get_country_name(code) for code in visa_data.get('VOA', {}).get('data', [])]
+    visa_free_countries = [get_country_name(code) for code in visa_data.get('VF', {}).get('data', [])]
+    covid_ban_countries = [get_country_name(code) for code in visa_data.get('CB', {}).get('data', [])]
+    no_admission_countries = [get_country_name(code) for code in visa_data.get('NA', {}).get('data', [])]
 
     if country in covid_ban_countries:
         return 'COVID-19 Ban'
