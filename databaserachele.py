@@ -10,9 +10,5 @@ def load_country_codes(file_name):
     
     return country_code_dict
 
-if __name__ == "__main__":
-    # Since the CSV file is in the same directory, you can simply specify its name
-    file_name = 'country-code.csv'
-    country_codes = load_country_codes(file_name)
-    print(country_codes)
-st.write (country_codes)
+file_name = 'country-code.csv'
+country_codes = load_country_codes(file_name)
