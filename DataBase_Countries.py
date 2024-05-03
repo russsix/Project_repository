@@ -241,7 +241,7 @@ country_codes={
     "Venezuela, Bolivarian Republic of": "ve",
     "Virgin Islands (British)": "vg",
     "Virgin Islands (U.S.)": "vi",
-    "Vietnam": "vn",
+    "Viet Nam": "vn",
     "Vanuatu": "vu",
     "Wallis and Futuna": "wf",
     "Samoa": "ws",
@@ -261,4 +261,3 @@ country_names = {code: country for country, code in country_codes.items()}
 def get_country_name(code):
     normalized_code = code.strip().lower()
     return country_names.get(normalized_code, 'None')
-print ('hi')
