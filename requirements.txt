@@ -2,3 +2,4 @@ streamlit
 requests
 geopandas
 plotly-express
+pandas
