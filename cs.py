@@ -4,7 +4,7 @@ import sys
 sys.path.append('rachelemantero/Project_repository')
 from two_states import run_visa_checker
 from one_state import run_visa_country_status
-from fun import get_visa_rank
+
 
 
 def run_flight_comparison():
