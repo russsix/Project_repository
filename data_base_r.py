@@ -5,11 +5,9 @@ from DataBase_Countries import country_codes
 def fetch_visa_free_count(country_code):
     url = f'https://rough-sun-2523.fly.dev/api/{country_code}'
     response = requests.get(url)
-    if response.status_code == 200:
-        data = response.json()
-        if not data.get('error', {}).get('status', True):  # Checking if there's no error
-            return len(data.get('vf', {}).get('data', []))
-    return 0  # Return 0 if there's an error or no data
+    data = response.json()
+    return len(data.get('vf', {}).get('data', []))
+      # Return 0 if there's an error or no data
 
 # Dictionary to store the number of visa-free countries per code
 visa_free_counts = {}
