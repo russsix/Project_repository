@@ -23,3 +23,4 @@ sorted_visa_free_counts = sorted(visa_free_counts.items(), key=lambda item: item
 
 # Print the sorted list
 st.write(sorted_visa_free_counts)
+st.write ('hey')
