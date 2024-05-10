@@ -6,6 +6,7 @@ import sys
 import pandas as pd
 
 from DataBase_Countries import country_codes, get_country_code, get_country_name
+from rank import count_visa_free_countries
 
 def fetch_visa_status_data(passport_code):
     """Fetch visa status data from the API."""
@@ -99,6 +100,10 @@ def run_visa_country_status():
         data = fetch_visa_status_data(passport_code)
         if data:
             plot_map(data)
+        if ranking:
+                st.write(f"Did you know that {selected_country} is number {ranking} in visa-free states?")
+            else:
+                st.write(f"Ranking data for {selected_country} is not available.")
         else:
             st.error("No visa data available for the selected country.")
     get_visa_rank(selected_country, data)
