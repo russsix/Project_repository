@@ -1,7 +1,6 @@
 #two_states.py
 import streamlit as st
 import requests
-import sys
 
 from DataBase_Countries import get_country_code, country_codes
 

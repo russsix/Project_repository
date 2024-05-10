@@ -2,20 +2,19 @@ import streamlit as st
 import requests
 import geopandas as gpd
 import plotly.express as px
-import sys
 import pandas as pd
 
 from DataBase_Countries import country_codes, get_country_code, get_country_name
 
 def fetch_visa_status_data(passport_code):
-    """Fetch visa status data from the API."""
+    #Fetch visa status data from the API
     url = f'https://rough-sun-2523.fly.dev/api/{passport_code}'
     response = requests.get(url)
     data = response.json()
     return data
 
 def visa_status(country, visa_data):
-    """Assign color based on visa requirement status."""
+    #Assign name based on country codes
     visa_required_countries = [get_country_name(code) for code in visa_data.get('vr', {}).get('data', [])]
     visa_on_arrival_countries = [get_country_name(code) for code in visa_data.get('voa', {}).get('data', [])]
     visa_free_countries = [get_country_name(code) for code in visa_data.get('vf', {}).get('data', [])]
