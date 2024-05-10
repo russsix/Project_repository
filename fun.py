@@ -104,7 +104,7 @@ def get_visa_rank(selected_country, visa_data):
 
 if __name__ == "__main__":
     run_visa_country_status()
-    
+    get_visa_rank()
 
 
 
