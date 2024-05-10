@@ -27,4 +27,4 @@ def get_ranked_countries():
     return ranked_countries
 
 # Execute the ranking function
-rank_countries()
+ranked_countries()
