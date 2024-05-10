@@ -14,7 +14,7 @@ def fetch_visa_status_data(passport_code):
     data = response.json()
     return data
 
-def color_for_visa_status(country, visa_data):
+def visa_status(country, visa_data):
     """Assign color based on visa requirement status."""
     visa_required_countries = [get_country_name(code) for code in visa_data.get('vr', {}).get('data', [])]
     visa_on_arrival_countries = [get_country_name(code) for code in visa_data.get('voa', {}).get('data', [])]
@@ -38,7 +38,7 @@ def color_for_visa_status(country, visa_data):
 def plot_map(visa_data):
     """Plot the world map with countries colored based on visa requirement status."""
     world = gpd.read_file("./global_states.geojson") 
-    world['Visa Status'] = world['ADMIN'].apply(lambda x: color_for_visa_status(x, visa_data))
+    world['Visa Status'] = world['ADMIN'].apply(lambda x: visa_status(x, visa_data))
 
     # Ensure the ordering of 'Visa Status' categories
     category_order = ['Visa Required', 'Visa On Arrival', 'Visa Free', 'COVID-19 Ban', 'No Admission', 'Unknown']
