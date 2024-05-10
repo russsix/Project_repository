@@ -1,6 +1,4 @@
 import streamlit as st
-import sys
-sys.path.append('rachelemantero/Project_repository')
 from two_states import run_visa_checker
 from fun import run_visa_country_status
 
