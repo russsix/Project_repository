@@ -83,6 +83,12 @@ def plot_map(visa_data):
 
     st.plotly_chart(fig)
 
+def get_visa_rank(selected_country, data):
+    visa_free_countries = [get_country_name(code) for code in data.get('vf', {}).get('data', [])]
+    if visa_free_countries:
+        rank = visa_free_countries.index(selected_country) + 1
+        st.write(f"Did you know that {selected_country} is number {rank} with visa free states.")
+
 def run_visa_country_status():
     st.title('Visa Country Status')
     
@@ -95,16 +101,12 @@ def run_visa_country_status():
             plot_map(data)
         else:
             st.error("No visa data available for the selected country.")
+    get_visa_rank(selected_country, data)
             
-def get_visa_rank(selected_country, visa_data):
-    visa_free_countries = [get_country_name(code) for code in visa_data.get('vf', {}).get('data', [])]
-    if visa_free_countries:
-        rank = visa_free_countries.index(selected_country) + 1
-        st.write(f"Did you know that {selected_country} is number {rank} with visa free states.")
 
 if __name__ == "__main__":
     run_visa_country_status()
-    get_visa_rank()
+  
 
 
 
