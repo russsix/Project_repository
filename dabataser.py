@@ -1,11 +1,6 @@
 import requests
 import streamlit as st
-
-# Assuming 'country_codes' is your dictionary of countries
-country_codes = {"Switzerland": "CH", "Italy": "IT", "Germany": "DE", "Afghanistan":"AF"}
-    # "CountryName": "CountryCode",
-    # Add your complete country codes dictionary here
-
+from DataBase_Countries import country_codes
 
 def fetch_visa_free_count(country_code):
     url = f'https://rough-sun-2523.fly.dev/api/{country_code}'
