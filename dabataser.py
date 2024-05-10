@@ -3,7 +3,7 @@ from DataBase_Countries import country_codes
 import streamlit as st
 
 def fetch_visa_free_count(country_code):
-    url = f'https://rough-sun-2523.fly.dev/api/{country_code}'
+    url = f'https://rough-sun-2523.fly.dev/api/{"country_code"}'
     response = requests.get(url)
     if response.status_code == 200:
         data = response.json()
