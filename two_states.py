@@ -62,8 +62,8 @@ def handle_visa_result():
     else:
         st.warning('The visa requirement for your destination is not clear or is unspecified.')
 
-def display_visa_free_destinations(passport_code):
-    url = f'https://rough-sun-2523.fly.dev/api/{passport_code}'
+def display_visa_free_destinations(departure_code):
+    url = f'https://rough-sun-2523.fly.dev/api/{departure_code}'
     response = requests.get(url)
     if response.status_code == 200:
         data = response.json()
