@@ -4,7 +4,6 @@ import requests
 from DataBase_Countries import get_country_code, country_codes
 from one_state import run_visa_country_status
 
-
 def run_visa_checker():
     st.title('Visa Requirement Checker')
 
@@ -24,24 +23,23 @@ def run_visa_checker():
         if response.status_code == 200:
             data = response.json()
             visa_status = data.get('status', '')
-            match visa_status:
-                case 'VF':
-                    duration = data.get('dur', None)
-                    message = f'A visa is not required up until {duration} days.' if duration else 'A visa is not required.'
-                    st.success(message)
-                case 'VOA':
-                    st.warning('You will obtain a visa upon arrival.')
-                case 'VR':
-                    st.error('A visa is required.')
-                    st.info('Not what you were expecting? Check out our "Visa Country Status" feature to see all your visa-free destinations.')
-                    if st.button("See Visa-Free Destinations"):
-                        st.session_state.show_visa_free_destinations = True
-                case 'CB':
-                    st.error('Travel is currently banned due to Covid-19 restrictions.')
-                case 'NA':
-                    st.error('No entry is permitted to travelers from your country.')
-                case _:
-                    st.warning('The visa requirement for your destination is not clear or is unspecified.')
+            if visa_status == 'VF':
+                duration = data.get('dur', None)
+                message = f'A visa is not required up until {duration} days.' if duration else 'A visa is not required.'
+                st.success(message)
+            elif visa_status == 'VOA':
+                st.warning('You will obtain a visa upon arrival.')
+            elif visa_status == 'VR':
+                st.error('A visa is required.')
+                st.info('Not what you were expecting? Check out our "Visa Country Status" feature to see all your visa-free destinations.')
+                if st.button("See Visa-Free Destinations"):
+                    st.session_state.show_visa_free_destinations = True
+            elif visa_status == 'CB':
+                st.error('Travel is currently banned due to Covid-19 restrictions.')
+            elif visa_status == 'NA':
+                st.error('No entry is permitted to travelers from your country.')
+            else:
+                st.warning('The visa requirement for your destination is not clear or is unspecified.')
         else:
             st.error(f"Failed to retrieve data. Status code: {response.status_code}")
 
