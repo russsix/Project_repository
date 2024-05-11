@@ -7,9 +7,9 @@ from one_state import run_visa_country_status
 def run_visa_checker():
     st.title('Visa Requirement Checker')
 
-    # Initialize session state variables if they don't exist
-    if 'show_visa_free_destinations' not in st.session_state:
-        st.session_state.show_visa_free_destinations = False
+    # Manage views with session state
+    if 'active_view' not in st.session_state:
+        st.session_state.active_view = 'checker'
 
     departure_country = st.selectbox("Select your passport country:", [""] + list(country_codes.keys()), key='checker_departure_country')
     destination_country = st.selectbox("Select your destination country:", [""] + list(country_codes.keys()), key='checker_destination_country')
@@ -33,7 +33,7 @@ def run_visa_checker():
                 st.error('A visa is required.')
                 st.info('Not what you were expecting? Check out our "Visa Country Status" feature to see all your visa-free destinations.')
                 if st.button("See Visa-Free Destinations"):
-                    st.session_state.show_visa_free_destinations = True
+                    st.session_state.active_view = 'visa_free'
             elif visa_status == 'CB':
                 st.error('Travel is currently banned due to Covid-19 restrictions.')
             elif visa_status == 'NA':
@@ -43,7 +43,8 @@ def run_visa_checker():
         else:
             st.error(f"Failed to retrieve data. Status code: {response.status_code}")
 
-    if st.session_state.show_visa_free_destinations:
+    # Manage view rendering based on state
+    if st.session_state.active_view == 'visa_free':
         run_visa_country_status()
 
 if __name__ == "__main__":
