@@ -90,29 +90,31 @@ def get_visa_rank(selected_country, data):
         rank = visa_free_countries.index(selected_country) + 1
         st.write(f"Did you know that {selected_country} is number {rank} with visa free states.")
 
-def run_visa_country_status():
+dedef run_visa_country_status():
     st.title('Visa Country Status')
     
-    selected_country = st.selectbox('Select your passport country:', list(country_codes.keys()), key = 'status_selected_country')
+    selected_country = st.selectbox('Select your passport country:', list(country_codes.keys()), key='status_selected_country')
     passport_code = get_country_code(selected_country)
 
     if st.button('Show Visa Requirements Map'):
         data = fetch_visa_status_data(passport_code)
         if data:
             plot_map(data)
-            ranking = count_visa_free_countries(data)
-        if ranking:
+            ranking = count_visa_free_countries(data)  # Assume this function returns a ranking
+            if ranking:
                 st.write(f"Did you know that {selected_country} is number {ranking} in visa-free states?")
             else:
-                st.write(f"Ranking data for {selected_country} is not available.")
+                st.write("Ranking data for the selected country is not available.")
         else:
             st.error("No visa data available for the selected country.")
-    get_visa_rank(selected_country, data)
-            
+        get_visa_rank(selected_country, data)  # Ensure this call is properly indented within the 'if data:' block
 
 if __name__ == "__main__":
     run_visa_country_status()
-  
+
+            
+
+
 
 
 
