@@ -94,6 +94,8 @@ def run_visa_country_status():
             plot_map(data)
         else:
             st.error("No visa data available for the selected country.")
+    st.write('Welcome to the Visa Country Status. Please select your passport country and check worldwide visa requirements.')
+
 
 if __name__ == "__main__":
     run_visa_country_status()
