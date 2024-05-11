@@ -1,74 +1,67 @@
 import streamlit as st
 import requests
 
-from DataBase_Countries import country_codes, get_country_code, get_country_name
+from DataBase_Countries import get_country_code, country_codes
+from one_state import run_visa_country_status
 
 def run_visa_checker():
     st.title('Visa Requirement Checker')
 
-    # Ensure session state variables are initialized
-    if 'show_visa_free' not in st.session_state:
-        st.session_state.show_visa_free = False
-    if 'departure_code' not in st.session_state:
-        st.session_state.departure_code = None
+    # Initialize session state for navigation if not already set
+    if 'navigation' not in st.session_state:
+        st.session_state.navigation = 'check_visa'
 
-    # Input widgets
-    departure_country = st.selectbox("Select your passport country:", [""] + list(country_codes.keys()), key='checker_departure_country')
-    destination_country = st.selectbox("Select your destination country:", [""] + list(country_codes.keys()), key='checker_destination_country')
+    # Select boxes for choosing countries
+    if st.session_state.navigation == 'check_visa':
+        departure_country = st.selectbox("Select your passport country:", [""] + list(country_codes.keys()), key='checker_departure_country')
+        destination_country = st.selectbox("Select your destination country:", [""] + list(country_codes.keys()), key='checker_destination_country')
 
-    # Handle visa requirement check
-    if st.button('Check Visa Requirement'):
+        if st.button('Check Visa Requirement'):
+            check_visa_requirements(departure_country, destination_country)
+
+    # Function to check visa requirements
+    def check_visa_requirements(departure_country, destination_country):
         departure_code = get_country_code(departure_country) if departure_country else None
         destination_code = get_country_code(destination_country) if destination_country else None
-        if departure_code and destination_code:
-            check_visa_requirements(departure_code, destination_code)
+        url = f'https://rough-sun-2523.fly.dev/api/{departure_code}/{destination_code}'
+        response = requests.get(url)
+        if response.status_code == 200:
+            data = response.json()
+            show_visa_status(data)
         else:
-            st.error("Please select both departure and destination countries.")
+            st.error(f"Failed to retrieve data. Status code: {response.status_code}")
 
-    # Conditionally display visa-free destinations
-    if st.session_state.show_visa_free:
-        display_visa_free_destinations()
+    # Function to display visa status and handle navigation
+    def show_visa_status(data):
+        visa_status = data.get('status', '')
+        if visa_status == 'VR':
+            st.error('A visa is required.')
+            if st.button("See Visa-Free Destinations"):
+                st.session_state.navigation = 'visa_free_destinations'
+        else:
+            display_status_message(visa_status, data)
 
-def check_visa_requirements(departure_code, destination_code):
-    st.session_state.departure_code = departure_code  # Store departure code in session state for later use
-    url = f'https://rough-sun-2523.fly.dev/api/{departure_code}/{destination_code}'
-    response = requests.get(url)
-    if response.status_code == 200:
-        data = response.json()
-        display_visa_status(data)
-    else:
-        st.error(f"Failed to retrieve data. Status code: {response.status_code}")
+    # Display appropriate messages based on visa status
+    def display_status_message(visa_status, data):
+        if visa_status == 'VF':
+            duration = data.get('dur', None)
+            message = f'A visa is not required up until {duration} days.' if duration else 'A visa is not required.'
+            st.success(message)
+        elif visa_status == 'VOA':
+            st.warning('You will obtain a visa upon arrival.')
+        elif visa_status == 'CB':
+            st.error('Travel is currently banned due to Covid-19 restrictions.')
+        elif visa_status == 'NA':
+            st.error('No entry is permitted to travelers from your country.')
+        else:
+            st.warning('The visa requirement for your destination is not clear or is unspecified.')
 
-def display_visa_status(data):
-    status = data.get('status', '')
-    if 'VF' in status:
-        duration = data.get('dur', None)
-        st.success(f'A visa is not required up until {duration} days.' if duration else 'A visa is not required.')
-    elif 'VOA' in status:
-        st.warning('You will obtain a visa upon arrival.')
-    elif 'VR' in status:
-        st.error('A visa is required.')
-        st.info('Not what you were expecting? Check out your visa-free destinations.')
-        if st.button("See Visa-Free Destinations"):
-            st.session_state.show_visa_free = True
-    elif 'CB' in status:
-        st.error('Travel is currently banned due to Covid-19 restrictions.')
-    elif 'NA' in status:
-        st.error('No entry is permitted to travelers from your country.')
-    else:
-        st.warning('The visa requirement for your destination is not clear or is unspecified.')
-
-def display_visa_free_destinations():
-    """Fetch and display visa-free destinations using the stored departure code."""
-    url = f'https://rough-sun-2523.fly.dev/api/{st.session_state.departure_code}'
-    response = requests.get(url)
-    if response.status_code == 200:
-        data = response.json()
-        visa_free_countries = [get_country_name(code) for code in data.get('vf', {}).get('data', [])]
-        st.write("Visa-free destinations:")
-        st.write(visa_free_countries)
-    else:
-        st.error("Failed to retrieve visa-free destinations.")
+    # Only display the visa free states function if navigation is set to it
+    if st.session_state.navigation == 'visa_free_destinations':
+        st.session_state['checker_departure_country'] = None  # Optionally clear previous state
+        st.session_state['checker_destination_country'] = None  # Optionally clear previous state
+        run_visa_country_status()  # Call the function to display visa-free destinations
 
 if __name__ == "__main__":
     run_visa_checker()
+s
