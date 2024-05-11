@@ -32,7 +32,7 @@ def run_visa_checker():
                 st.warning ('You will obtain a visa upon arrival.')
             elif 'VR' in data.get ('status', ''):
                 st.error ('A visa is required.')
-                st.info('Not what you were expecting? Check out our "Visa Country Status" function.')
+                st.info('Not what you were expecting? Check out our "Visa Country Status" feature to see all your visa-free destinations.')
             elif 'CB' in data.get ('status', ''):
                 st.error ('Travel is currently banned due to Covid-19 restrictions.')
             elif 'NA' in data.get ('status', ''):
