@@ -100,7 +100,7 @@ dedef run_visa_country_status():
         data = fetch_visa_status_data(passport_code)
         if data:
             plot_map(data)
-            ranking = count_visa_free_countries(data)  # Assume this function returns a ranking
+            ranking = count_visa_free_countries(data)  #
             if ranking:
                 st.write(f"Did you know that {selected_country} is number {ranking} in visa-free states?")
             else:
