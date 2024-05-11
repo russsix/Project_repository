@@ -70,8 +70,8 @@ def display_visa_free_destinations(departure_code):
         visa_free_countries = [get_country_name(code) for code in data.get('vf', {}).get('data', [])]
         if visa_free_countries:
             # Join all country names into a single string with each name on a new line
-            formatted_countries = "\n".join(visa_free_countries)
-            st.text(formatted_countries)  # Using st.text to maintain text format without additional styling
+            formatted_countries = ", ".join(visa_free_countries)
+            st.write(formatted_countries)  # Using st.text to maintain text format without additional styling
         else:
             st.write("No visa-free destinations available.")
     else:
