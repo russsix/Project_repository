@@ -5,6 +5,7 @@ import plotly.express as px
 import pandas as pd
 
 from DataBase_Countries import country_codes, get_country_code, get_country_name
+from rak import sorted_visa_free
 
 # Function modified to fetch data and immediately calculate the visa-free rankings
 def fetch_and_sort_visa_data(passport_code):
