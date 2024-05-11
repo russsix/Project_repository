@@ -53,7 +53,7 @@ def handle_visa_result():
         st.warning('You will obtain a visa upon arrival.')
     elif visa_status == 'VR':
         st.error('A visa is required.')
-        st.write ('Is this not what you were expecting? To see al your visa-free destinations click the button below.')
+        st.write ('Is this not what you were expecting? To see all your visa-free destinations click the button below.')
         if st.button("See Visa-Free Destinations"):
             st.session_state.current_page = 'visa_free_destinations'
     elif visa_status == 'CB':
