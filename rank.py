@@ -8,13 +8,9 @@ def fetch_visa_status_data(passport_code):
     data = response.json()
     return data
     
-#takes the dictionary 
-def count_visa_free_countries(country_codes):
-    #empty dictionary to store visa count
-    visa_free_counts = {}
-    for country, code in country_codes.items():
-        visa_free = fetch_visa_free_countries(code)
-        visa_free_counts[country] = len(visa_free)
-    sorted_visa_free = sorted(visa_free_counts.items(), key=lambda x: x[1], reverse=True)
-    return sorted_visa_free
+visa_free_counts = {}
+for country, code in country_codes.items():
+    visa_free = [get_country_name(code) for code in data.get('vf', {}).get('data', [])]
+    visa_free_counts[country] = len(visa_free)
+sorted_visa_free = sorted(visa_free_counts.items(), key=lambda x: x[1], reverse=True)
 
