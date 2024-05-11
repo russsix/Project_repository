@@ -3,3 +3,4 @@ requests
 geopandas
 plotly-express
 pandas
+time

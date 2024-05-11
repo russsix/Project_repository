@@ -4,7 +4,7 @@ import sys
 sys.path.append('rachelemantero/Project_repository')
 from two_states import run_visa_checker
 from one_state import run_visa_country_status
-
+from Flight_data
 
 
 def run_flight_comparison():
@@ -19,7 +19,7 @@ def main():
     elif app_option == 'Visa Country Status':
         run_visa_country_status()
     elif app_option == 'Flight Comparison':
-        run_flight_comparison()
+        
 
 if __name__ == "__main__":
     main()
