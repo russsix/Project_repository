@@ -2,7 +2,6 @@ import streamlit as st
 import requests
 import geopandas as gpd
 import plotly.express as px
-import sys
 import pandas as pd
 
 from DataBase_Countries import country_codes, get_country_code, get_country_name
@@ -90,7 +89,7 @@ def get_visa_rank(selected_country, data):
         rank = visa_free_countries.index(selected_country) + 1
         st.write(f"Did you know that {selected_country} is number {rank} with visa free states.")
 
-dedef run_visa_country_status():
+def run_visa_country_status():
     st.title('Visa Country Status')
     
     selected_country = st.selectbox('Select your passport country:', list(country_codes.keys()), key='status_selected_country')
