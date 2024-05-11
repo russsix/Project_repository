@@ -5,108 +5,47 @@ import plotly.express as px
 import pandas as pd
 
 from DataBase_Countries import country_codes, get_country_code, get_country_name
-from rank import count_visa_free_countries
 
-def fetch_visa_status_data(passport_code):
-    """Fetch visa status data from the API."""
+# Function modified to fetch data and immediately calculate the visa-free rankings
+def fetch_and_sort_visa_data(passport_code):
+    """Fetch visa status data from the API and sort visa-free countries."""
     url = f'https://rough-sun-2523.fly.dev/api/{passport_code}'
     response = requests.get(url)
     data = response.json()
-    return data
-
-def color_for_visa_status(country, visa_data):
-    """Assign color based on visa requirement status."""
-    visa_required_countries = [get_country_name(code) for code in visa_data.get('vr', {}).get('data', [])]
-    visa_on_arrival_countries = [get_country_name(code) for code in visa_data.get('voa', {}).get('data', [])]
-    visa_free_countries = [get_country_name(code) for code in visa_data.get('vf', {}).get('data', [])]
-    covid_ban_countries = [get_country_name(code) for code in visa_data.get('cb', {}).get('data', [])]
-    no_admission_countries = [get_country_name(code) for code in visa_data.get('na', {}).get('data', [])]
-
-    if country in covid_ban_countries:
-        return 'COVID-19 Ban'
-    elif country in no_admission_countries:
-        return 'No Admission'
-    elif country in visa_required_countries:
-        return 'Visa Required'
-    elif country in visa_on_arrival_countries:
-        return 'Visa On Arrival'
-    elif country in visa_free_countries:
-        return 'Visa Free'
-    else:
-        return 'Unknown'
-
-def plot_map(visa_data):
-    """Plot the world map with countries colored based on visa requirement status."""
-    world = gpd.read_file("./global_states.geojson") 
-    world['Visa Status'] = world['ADMIN'].apply(lambda x: color_for_visa_status(x, visa_data))
-
-    # Ensure the ordering of 'Visa Status' categories
-    category_order = ['Visa Required', 'Visa On Arrival', 'Visa Free', 'COVID-19 Ban', 'No Admission', 'Unknown']
-    world['Visa Status'] = pd.Categorical(world['Visa Status'], categories=category_order, ordered=True)
-
-    # Sort the dataframe by 'Visa Status' to ensure correct legend order
-    world.sort_values('Visa Status', inplace=True)
     
-    fig = px.choropleth(
-        world, 
-        geojson=world.geometry, 
-        locations=world.index, 
-        color='Visa Status',
-        color_discrete_map={
-            'Visa Required': 'red',
-            'Visa On Arrival': 'yellow',
-            'Visa Free': 'green',
-            'COVID-19 Ban': 'blue',
-            'No Admission': 'black',
-            'Unknown': 'grey'
-        },
-        projection='natural earth',
-        labels={'Visa Status': 'Visa Requirement Status'},
-        title='World Map by Visa Requirement Status',
-        hover_name='ADMIN',  # Show country name
-        hover_data={'Visa Status': True}  # Include visa status in the hover
-    )
-    # Update layout for transparent background and no index in hover data
-    fig.update_geos(visible=False, bgcolor='rgba(0,0,0,0)')
-    fig.update_layout(
-        paper_bgcolor='rgba(0,0,0,0)',
-        plot_bgcolor='rgba(0,0,0,0)',
-        geo=dict(
-            landcolor='rgba(0,0,0,0)',
-            showland=True,
-            showcountries=True,
-            countrycolor='white'
-        ),
-        legend_title_text='Visa Status',
-        coloraxis_showscale=True  # Enable the color scale
-    )
+    # Calculating visa-free rankings within this function
+    visa_free_counts = {}
+    for country, code in country_codes.items():
+        visa_free = [get_country_name(code) for code in data.get('vf', {}).get('data', [])]
+        visa_free_counts[country] = len(visa_free)
+    sorted_visa_free = sorted(visa_free_counts.items(), key=lambda x: x[1], reverse=True)
+    
+    return data, sorted_visa_free
 
+def plot_map(data):
+    """Plotting the visa requirements map."""
+    # Implementation for plotting, using data
+    df = pd.DataFrame(data)
+    fig = px.choropleth(df)
     st.plotly_chart(fig)
 
-def get_visa_rank(selected_country, data):
-    visa_free_countries = [get_country_name(code) for code in data.get('vf', {}).get('data', [])]
-    if visa_free_countries:
-        rank = visa_free_countries.index(selected_country) + 1
-        st.write(f"Did you know that {selected_country} is number {rank} with visa free states.")
-
 def run_visa_country_status():
+    """Main function to run the Streamlit app."""
     st.title('Visa Country Status')
     
     selected_country = st.selectbox('Select your passport country:', list(country_codes.keys()), key='status_selected_country')
     passport_code = get_country_code(selected_country)
 
     if st.button('Show Visa Requirements Map'):
-        data = fetch_visa_status_data(passport_code)
+        data, ranking = fetch_and_sort_visa_data(passport_code)  # Fetch and sort data
         if data:
             plot_map(data)
-            ranking = count_visa_free_countries(data)  #
             if ranking:
-                st.write(f"Did you know that {selected_country} is number {ranking} in visa-free states?")
+                st.write(f"Did you know that {selected_country} is number {ranking.index((selected_country, next(x[1] for x in ranking if x[0] == selected_country))) + 1} in visa-free states?")
             else:
                 st.write("Ranking data for the selected country is not available.")
         else:
             st.error("No visa data available for the selected country.")
-        get_visa_rank(selected_country, data)  # Ensure this call is properly indented within the 'if data:' block
 
 if __name__ == "__main__":
     run_visa_country_status()
