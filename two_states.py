@@ -64,4 +64,3 @@ def run_visa_checker():
 
 if __name__ == "__main__":
     run_visa_checker()
-s
