@@ -4,11 +4,9 @@ import sys
 sys.path.append('rachelemantero/Project_repository')
 from two_states import run_visa_checker
 from one_state import run_visa_country_status
-from Flight_data
 
 
-def run_flight_comparison():
-    st.sidebar.write("Flight Comparison feature coming soon.")
+
 def main():
     st.sidebar.title('Navigation')
     app_option = st.sidebar.selectbox('Choose a feature:',
@@ -18,7 +16,7 @@ def main():
         run_visa_checker()
     elif app_option == 'Visa Country Status':
         run_visa_country_status()
-    elif app_option == 'Flight Comparison':
+
         
 
 if __name__ == "__main__":
