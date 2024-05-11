@@ -32,7 +32,7 @@ def run_visa_checker():
                 st.warning ('You will obtain a visa upon arrival.')
             elif 'VR' in data.get ('status', ''):
                 st.error ('A visa is required.')
-                st.info('Not what you were expecting? Check out our "Visa Country Status" feature to see all your visa-free destinations.')
+                st.info('Not what you were expecting? Check out your visa-free destinations.')
                 if st.button("See Visa-Free Destinations"):
                     url = f'https://rough-sun-2523.fly.dev/api/{departure_code}'
                     response = requests.get(url)
