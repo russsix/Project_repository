@@ -54,6 +54,7 @@ def handle_visa_result():
     elif visa_status == 'VR':
         st.error('A visa is required.')
         if st.button("See Visa-Free Destinations"):
+            st.write ('Is this not what you were expecting? To see al your visa-free destinations click the button below.')
             st.session_state.current_page = 'visa_free_destinations'
     elif visa_status == 'CB':
         st.error('Travel is currently banned due to Covid-19 restrictions.')
