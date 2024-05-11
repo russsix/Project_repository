@@ -3,7 +3,7 @@ import streamlit as st
 import requests
 
 from DataBase_Countries import get_country_code, country_codes
-
+from one_state import run_visa_country_status
 
 
 def run_visa_checker():
@@ -33,6 +33,8 @@ def run_visa_checker():
             elif 'VR' in data.get ('status', ''):
                 st.error ('A visa is required.')
                 st.info('Not what you were expecting? Check out our "Visa Country Status" feature to see all your visa-free destinations.')
+                if st.button("See Visa-Free Destinations"):
+                    run_visa_country_status()
             elif 'CB' in data.get ('status', ''):
                 st.error ('Travel is currently banned due to Covid-19 restrictions.')
             elif 'NA' in data.get ('status', ''):
