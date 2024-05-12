@@ -180,69 +180,18 @@ def display_flights(flight_details):
 
         st.markdown("---")
 
-    
-st.title('Flight Search Tool')
-
-# Define a mapping from user-friendly terms to data keys
-sorting_options = {
-    "Price": "priceRaw",
-    "Duration": "durationInMinutes",
-     "Number of Stops": "stopCount"
- }
-
- # Initialize session state variables if not already set
-if 'flight_details' not in st.session_state:
-    st.session_state.flight_details = []
-
-with st.form("flight_form"):
-    from_entity = st.text_input("Departure City", "New York")
-    to_entity = st.text_input("Arrival City", "London")
-    depart_date = st.date_input("Departure Date")
-    currency = st.selectbox("Currency", ['CHF', 'EUR', 'USD'], index=1)
-    adults = st.slider("Adults (12+)", 0, 8, 0)
-    children = st.slider("Children (2-12)", 0, 8, 0)
-    infants = st.slider("Infants (under 2)", 0, 8, 0)
-    cabin_class = st.selectbox("Cabin Class", ['economy', 'premium_economy', 'business', 'first'])
-    submit_button = st.form_submit_button("Search Flights")
-
-if submit_button:
-    # Check if no passengers are entered
-    if adults == 0 and children == 0 and infants == 0:
-        st.error("Please enter passengers.")
-    else:
-        dep_results = city_id_search(from_entity)
-        arr_results = city_id_search(to_entity)
-        if dep_results and arr_results:
-            from_entity_id = extract_city_id(dep_results)[0]['presentationId']
-            to_entity_id = extract_city_id(arr_results)[0]['presentationId']
-            flights = get_one_way_flights(from_entity_id, to_entity_id, str(depart_date), 'US', 'en-US', currency, adults, children, infants, cabin_class)
-
-            if 'data' in flights and 'context' in flights['data'] and 'status' in flights['data']['context']:
-                if flights['data']['context']['status'] == "incomplete":
-                    st.warning("Completing results...")
-                    session_id = flights['data']['context']['sessionId']
-                    flights = search_incomplete_fix(session_id)
-                    st.success("Results completed.")
-                else:
-                    st.success("Results are complete.")
-
-                st.session_state.flight_details = extract_flight_information(flights)
-
-# Display sorting options and results count input outside the form to interact dynamically
-sort_by = st.selectbox("Sort by", list(sorting_options.keys()), key="sort_by")
-sort_order = st.radio("Sort order", ['Ascending', 'Descending'], key="sort_order")
-result_count = st.number_input("Max results to display", 1, 100, 10, key="result_count")
-
-if st.session_state.flight_details:
-    sorted_flights = sort_flights(st.session_state.flight_details, sorting_options[sort_by], ascending=(sort_order == 'Ascending'), max_results=result_count)
-    display_flights(sorted_flights)
-else:
-    st.error("Flight search did not return expected data or no search has been initiated.")
 
 def flight_main():
     st.title('Flight Search Tool')
 
-    # Initialize session state for flight details if it's not already set
+    # Define a mapping from user-friendly terms to data keys
+    sorting_options = {
+        "Price": "priceRaw",
+        "Duration": "durationInMinutes",
+        "Number of Stops": "stopCount"
+     }
+
+     # Initialize session state variables if not already set
     if 'flight_details' not in st.session_state:
         st.session_state.flight_details = []
 
@@ -251,43 +200,45 @@ def flight_main():
         to_entity = st.text_input("Arrival City", "London")
         depart_date = st.date_input("Departure Date")
         currency = st.selectbox("Currency", ['CHF', 'EUR', 'USD'], index=1)
-        adults = st.slider("Adults (12+)", 1, 8, 1)  # Set a default value to avoid 0
+        adults = st.slider("Adults (12+)", 0, 8, 0)
         children = st.slider("Children (2-12)", 0, 8, 0)
         infants = st.slider("Infants (under 2)", 0, 8, 0)
         cabin_class = st.selectbox("Cabin Class", ['economy', 'premium_economy', 'business', 'first'])
         submit_button = st.form_submit_button("Search Flights")
 
     if submit_button:
-        # Fetch data only if not already fetched or if different parameters are used
-        if not st.session_state.flight_details or any([from_entity, to_entity, depart_date, currency, adults, children, infants, cabin_class]):
+        # Check if no passengers are entered
+        if adults == 0 and children == 0 and infants == 0:
+            st.error("Please enter passengers.")
+        else:
             dep_results = city_id_search(from_entity)
             arr_results = city_id_search(to_entity)
             if dep_results and arr_results:
                 from_entity_id = extract_city_id(dep_results)[0]['presentationId']
                 to_entity_id = extract_city_id(arr_results)[0]['presentationId']
                 flights = get_one_way_flights(from_entity_id, to_entity_id, str(depart_date), 'US', 'en-US', currency, adults, children, infants, cabin_class)
-                
+
                 if 'data' in flights and 'context' in flights['data'] and 'status' in flights['data']['context']:
                     if flights['data']['context']['status'] == "incomplete":
                         st.warning("Completing results...")
                         session_id = flights['data']['context']['sessionId']
                         flights = search_incomplete_fix(session_id)
                         st.success("Results completed.")
-                        st.session_state.flight_details = extract_flight_information(flights)
                     else:
                         st.success("Results are complete.")
-                        st.session_state.flight_details = extract_flight_information(flights)
 
-    # Sorting and display outside the form to interact dynamically
+                    st.session_state.flight_details = extract_flight_information(flights)
+
+    # Display sorting options and results count input outside the form to interact dynamically
+    sort_by = st.selectbox("Sort by", list(sorting_options.keys()), key="sort_by")
+    sort_order = st.radio("Sort order", ['Ascending', 'Descending'], key="sort_order")
+    result_count = st.number_input("Max results to display", 1, 100, 10, key="result_count")
+
     if st.session_state.flight_details:
-        sort_by = st.selectbox("Sort by", ["Price", "Duration", "Number of Stops"], key="sort_by")
-        sort_order = st.radio("Sort order", ['Ascending', 'Descending'], key="sort_order")
-        result_count = st.number_input("Max results to display", 1, 100, 10, key="result_count")
-
-        sorted_flights = sort_flights(st.session_state.flight_details, sort_by.lower() + "Raw", ascending=(sort_order == 'Ascending'), max_results=result_count)
+        sorted_flights = sort_flights(st.session_state.flight_details, sorting_options[sort_by], ascending=(sort_order == 'Ascending'), max_results=result_count)
         display_flights(sorted_flights)
     else:
-        st.error("No flight data available or no search has been initiated.")
+        st.error("Flight search did not return expected data or no search has been initiated.")
 
 # Adjusting as needed for execution
 if __name__ == '__main__':
