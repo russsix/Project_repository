@@ -3,6 +3,7 @@ import sys
 sys.path.append('rachelemantero/Project_repository')
 from two_states import run_visa_checker
 from one_state import run_visa_country_status
+from Flight_data import main
 
 def main():
     # Set the page title
@@ -24,6 +25,8 @@ def main():
         run_visa_checker()
     elif app_option == 'One State':
         run_visa_country_status()
+    elif app_option == 'Flight Search':
+        main ()
 
 if __name__ == "__main__":
     main()
