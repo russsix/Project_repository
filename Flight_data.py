@@ -2,7 +2,7 @@ import streamlit as st
 import requests
 import time
 
-#Calls the flights/auto-complete API to get the information associated to a city
+# Calls the flights/auto-complete API to get the information associated to a city
 def city_id_search(city):
     url = "https://sky-scanner3.p.rapidapi.com/flights/auto-complete"
     querystring = {"query": city, "placeTypes": "CITY"}
@@ -13,7 +13,7 @@ def city_id_search(city):
     response = requests.get(url, headers=headers, params=querystring)
     return response.json()
 
-#Extracts the id associated with the city from the flights/auto-complete response
+# Extracts the id associated with the city from the flights/auto-complete response
 def extract_city_id(response_data):
     city_info = []
     try:    
@@ -27,7 +27,7 @@ def extract_city_id(response_data):
         
     return city_info
 
-#function to call API for one way trips
+# Function to call API for one way trips
 def get_one_way_flights(from_entity_id, to_entity_id, depart_date, market, locale, currency, adults, children, infants, cabin_class):
     url = "https://sky-scanner3.p.rapidapi.com/flights/search-one-way"
     querystring = {
@@ -49,7 +49,7 @@ def get_one_way_flights(from_entity_id, to_entity_id, depart_date, market, local
     response = requests.get(url, headers=headers, params=querystring)
     return response.json()
 
-#function to call API for round trips
+# Function to call API for round trips
 def get_round_trip_flights(from_entity_id, to_entity_id, depart_date, return_date, market, locale, currency, adults, children, infants, cabin_class = 'economy'):
     url = "https://sky-scanner3.p.rapidapi.com/flights/search-roundtrip"
     querystring = {
@@ -100,7 +100,7 @@ def search_incomplete_fix(session_id):
             break  # Exit loop if response format is not as expected
 
             
-#extract from the full API response, the data that interests us           
+# Extract from the full API response, the data that interests us           
 def extract_flight_information(flight_search_results):
     flights = flight_search_results['data']['itineraries']
     flight_details = []
@@ -130,7 +130,7 @@ def extract_flight_information(flight_search_results):
                 
     return flight_details
 
-#function to sort results
+# Function to sort results
 def sort_flights(flight_details, sort_by, ascending=True, max_results=None):
     if sort_by == 'priceRaw':
         key_func = lambda x: x['priceRaw']
