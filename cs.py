@@ -9,8 +9,8 @@ from Flight_data import flight_main
 
 st.set_page_config(page_title="Check-It")
 
+#function that pulls together all the features
 def main():
-    # Set the page title
 
     # Large sidebar title using HTML for serif font styling
     st.sidebar.markdown(

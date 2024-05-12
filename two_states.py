@@ -13,6 +13,7 @@ def run_visa_checker():
     def navigate_to(page_name):
         st.session_state.current_page = page_name
 
+    #user selects his passport and destination country
     departure_country = st.selectbox("Select your passport country:", [""] + list(country_codes.keys()), key='checker_departure_country')
     destination_country = st.selectbox("Select your destination country:", [""] + list(country_codes.keys()), key='checker_destination_country')
 
@@ -43,6 +44,7 @@ def run_visa_checker():
     elif st.session_state.current_page == 'visa_free_destinations':
         display_visa_free_destinations(st.session_state.departure_code)
 
+#Print Visa Requirements
 def handle_visa_result():
     visa_status = st.session_state.get('visa_status', '')
     if visa_status == 'VF':
@@ -53,7 +55,7 @@ def handle_visa_result():
         st.warning('You will obtain a visa upon arrival.')
     elif visa_status == 'VR':
         st.error('A visa is required.')
-        st.write ('Is this not what you were expecting? To see all your visa-free destinations click the button below.')
+        st.write ('Is this not what you were expecting? To see all your visa-free destinations click the button below twice.')
         if st.button("See Visa-Free Destinations"):
             st.session_state.current_page = 'visa_free_destinations'
     elif visa_status == 'CB':
@@ -63,6 +65,7 @@ def handle_visa_result():
     else:
         st.warning('The visa requirement for your destination is not clear or is unspecified.')
 
+#function to display visa-free-destinations
 def display_visa_free_destinations(departure_code):
     url = f'https://rough-sun-2523.fly.dev/api/{departure_code}'
     response = requests.get(url)
@@ -70,9 +73,10 @@ def display_visa_free_destinations(departure_code):
         data = response.json()
         visa_free_countries = [get_country_name(code) for code in data.get('vf', {}).get('data', [])]
         if visa_free_countries:
-            # Join all country names into a single string with each name on a new line
+
+            # Join all country names into a single string divided by a comma
             formatted_countries = ", ".join(visa_free_countries)
-            st.write(formatted_countries)  # Using st.text to maintain text format without additional styling
+            st.write(formatted_countries) 
         else:
             st.write("No visa-free destinations available.")
     else:
