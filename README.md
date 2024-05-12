@@ -1,4 +1,4 @@
-This is the description of the Group number 1.4.
+This is the description of the Group 1.4.
 
 Our site has three different features.
 The first is 'Two States'.
