@@ -236,7 +236,7 @@ def flight_main():
 
     if st.session_state.flight_details:
         sorted_flights = sort_flights(st.session_state.flight_details, sorting_options[sort_by], ascending=(sort_order == 'Ascending'), max_results=result_count)
-        display_flights(sorted_flights)
+        display_flights(sorted_flights, currency)
     else:
         st.error("Flight search did not return expected data or no search has been initiated.")
 
