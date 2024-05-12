@@ -17,12 +17,12 @@ def main():
     # Sidebar navigation and welcome text
     st.sidebar.write("Welcome to the Visa and Travel Assistant! Select a feature from the list below to get started.")
     app_option = st.sidebar.selectbox('Choose a feature:',
-                                      ['Two States', 'Visa Country Status', 'Flight Comparison'])
+                                      ['Two States', 'One State', 'Flight Search'])
 
     # Conditional execution based on sidebar selection
     if app_option == 'Two States':
         run_visa_checker()
-    elif app_option == 'Visa Country Status':
+    elif app_option == 'One State':
         run_visa_country_status()
 
 if __name__ == "__main__":
