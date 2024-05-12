@@ -147,7 +147,7 @@ def sort_flights(flight_details, sort_by, ascending=True, max_results=None):
     return sorted_details
 
 
-def display_flights(flight_details):
+def display_flights(flight_details, currency):
     for flight in flight_details:
         # Define the columns with relative widths
         cols = st.columns([3, 5, 1.5, 5, 2])
