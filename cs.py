@@ -1,13 +1,16 @@
+#cs.py
+
 import streamlit as st
 import sys
 sys.path.append('rachelemantero/Project_repository')
 from two_states import run_visa_checker
 from one_state import run_visa_country_status
-from Flight_data import main
+from Flight_data import flight_main
+
+st.set_page_config(page_title="Check-It")
 
 def main():
     # Set the page title
-    st.set_page_config(page_title="Check-It")
 
     # Large sidebar title using HTML for serif font styling
     st.sidebar.markdown(
