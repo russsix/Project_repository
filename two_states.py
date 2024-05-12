@@ -39,8 +39,6 @@ def run_visa_checker():
     # Handle result display and navigation to visa-free destinations
     elif st.session_state.current_page == 'result':
         handle_visa_result()
-        if st.button('Now book flights')
-            flight_main ()
 
     # Display only visa-free destinations if navigated to this page
     elif st.session_state.current_page == 'visa_free_destinations':
