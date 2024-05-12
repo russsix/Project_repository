@@ -17,7 +17,7 @@ def main():
                                       ['Two States', 'Visa Country Status', 'Flight Comparison'])
 
     # Smaller main page title using HTML for top-left styling
-    st.markdown("<h2 style='font-size: 18px; color: black; position: absolute; top: 0; left: 0;'>Check-It ✅</h2>", unsafe_allow_html=True)
+    st.markdown("<h2 style='font-size: 18px; color: black; position: absolute; top: 0; right: 0;'>Check-It ✅</h2>", unsafe_allow_html=True)
     
     # Conditional execution based on sidebar selection
     if app_option == 'Two States':
