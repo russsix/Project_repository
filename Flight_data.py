@@ -239,7 +239,7 @@ if st.session_state.flight_details:
 else:
     st.error("Flight search did not return expected data or no search has been initiated.")
 
-def main():
+def flight_main():
     st.title('Flight Search Tool')
 
     with st.form("flight_form"):
@@ -288,4 +288,4 @@ def main():
 
 # Calling main() when the script is run (if not imported)
 if __name__ == '__main__':
-    main()
+    flight_main()
