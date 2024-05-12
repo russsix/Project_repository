@@ -46,7 +46,7 @@ def run_visa_checker():
 def handle_visa_result():
     visa_status = st.session_state.get('visa_status', '')
     if visa_status == 'VF':
-        duration = st.session_state.response_data.get('dur', None)
+        duration = st.session_state.response_data.get('dur', None) if 'response_data' in st.session_state and 'dur' in st.session_state.response_data else None
         message = f'A visa is not required up until {duration} days.' if duration else 'A visa is not required.'
         st.success(message)
     elif visa_status == 'VOA':
