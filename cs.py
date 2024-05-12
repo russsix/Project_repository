@@ -29,7 +29,7 @@ def main():
     elif app_option == 'One State':
         run_visa_country_status()
     elif app_option == 'Flight Search':
-        main ()
+        flight_main ()
 
 if __name__ == "__main__":
     main()
