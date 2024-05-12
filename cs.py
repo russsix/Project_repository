@@ -8,8 +8,11 @@ def main():
     # Set the page title
     st.set_page_config(page_title="Check-It")
 
-    # Large sidebar title using HTML for styling
-    st.sidebar.markdown("<h1 style='font-size: 32px; color: black; margin-top: 0;'>Check-It ✅</h1>", unsafe_allow_html=True)
+    # Large sidebar title using HTML for serif font styling
+    st.sidebar.markdown(
+        "<h1 style='font-size: 32px; color: black; margin-top: 0; font-family: \"Times New Roman\", Times, serif;'>Check-It ✅</h1>", 
+        unsafe_allow_html=True
+    )
 
     # Sidebar navigation and welcome text
     st.sidebar.write("Welcome to the Visa and Travel Assistant! Select a feature from the list below to get started.")
