@@ -20,7 +20,7 @@ def main():
     st.sidebar.markdown("<div style='margin-top: 20px;'></div>", unsafe_allow_html=True)
 
     # Sidebar navigation and welcome text
-    st.sidebar.write("Welcome to the Visa and Travel Assistant! Select a feature from the list below to get started.")
+    st.sidebar.write("Welcome to your Visa and Travel Assistant! Select a feature from the list below to get started.")
     app_option = st.sidebar.selectbox('Choose a feature:',
                                       ['Two States', 'One State', 'Flight Search'])
 
