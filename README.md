@@ -8,4 +8,4 @@ The second is 'Visa Country Status'.
 The third is 'Flight Data Comparison'
     The main goal is that the user inputs their departure, destination country and other filters in order to get different flights ordered by price and duration.
 
-This three features are imported together in one main file 'cs.py'.
+This three features are imported together in one main file 'cs.py'. In order to visualize the code on streamlit, you need to run this file.
