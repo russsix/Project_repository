@@ -30,8 +30,3 @@ country_codes_second = load_country_codes_second (file_name)
 def get_country_code(country_name):
     return country_codes.get(country_name, None)
 
-country_names = {code: country for country, code in country_codes.items()} # Creates a dictionary switching country codes and names as keys and values
-
-# Gets country names for given country codes
-def get_country_name(code):
-    return country_names.get(code, 'None')
