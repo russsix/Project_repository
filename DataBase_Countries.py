@@ -3,6 +3,7 @@
 and creates a dictionary with the corresponding keys and values"""
 
 import pandas as pd
+import streamlit as st
 
 def load_country_codes(file_name):
     # Load the CSV file from the given filename
@@ -21,6 +22,7 @@ def load_country_codes_second (file_name):
 
 file_name = 'country-code.csv'
 country_codes = load_country_codes(file_name)
+country_codes_second = load_country_codes_second (file_name)
 
 # Gets country codes for given country names    
 def get_country_code(country_name):
@@ -31,3 +33,5 @@ country_names = {code: country for country, code in country_codes.items()} # Cre
 # Gets country names for given country codes
 def get_country_name(code):
     return country_names.get(code, 'None')
+
+st.write (country_codes_second)
