@@ -2,7 +2,7 @@ import streamlit as st
 import requests
 import time
 
-# Calls the flights/auto-complete API to get the information associated to a city
+# Calls the flights/auto-complete API to get the information associated to a city later needed to call one-way and round-trip functions
 def city_id_search(city):
     url = "https://sky-scanner3.p.rapidapi.com/flights/auto-complete"
     querystring = {"query": city, "placeTypes": "CITY"}
@@ -49,7 +49,7 @@ def get_one_way_flights(from_entity_id, to_entity_id, depart_date, market, local
     response = requests.get(url, headers=headers, params=querystring)
     return response.json()
 
-# Function to call API for round trips
+# Function to call API for round trips (function not dropped from the final run code because of unresolved technical errors)
 def get_round_trip_flights(from_entity_id, to_entity_id, depart_date, return_date, market, locale, currency, adults, children, infants, cabin_class = 'economy'):
     url = "https://sky-scanner3.p.rapidapi.com/flights/search-roundtrip"
     querystring = {
@@ -72,7 +72,7 @@ def get_round_trip_flights(from_entity_id, to_entity_id, depart_date, return_dat
     response = requests.get(url, headers=headers, params=querystring)
     return response.json()
 
-# Function to check the status and fetch results if incomplete
+# Function to check the status of API responses and fetch results if incomplete with the flights/search-incomplete query
 def search_incomplete_fix(session_id):
     url = "https://sky-scanner3.p.rapidapi.com/flights/search-incomplete"
     headers = {
@@ -94,7 +94,7 @@ def search_incomplete_fix(session_id):
                 print("Current status:", status)
                 return data
             else:
-                time.sleep(5)  # Wait for 10 seconds before making a new request
+                time.sleep(5)  # Wait for 5 seconds before making a new request to allow for delays in API response time
         else:
             print("Unexpected API response format:", data)
             break  # Exit loop if response format is not as expected
@@ -130,7 +130,7 @@ def extract_flight_information(flight_search_results):
                 
     return flight_details
 
-# Function to sort results
+# Function to sort results according to priceRaw, durationInMinutes or stopCount (ascending or descending)
 def sort_flights(flight_details, sort_by, ascending=True, max_results=None):
     if sort_by == 'priceRaw':
         key_func = lambda x: x['priceRaw']
@@ -139,22 +139,22 @@ def sort_flights(flight_details, sort_by, ascending=True, max_results=None):
     elif sort_by == 'stopCount':
         key_func = lambda x: x['stopCount']
     else:
-        return flight_details  # No sorting if sort_by criteria is unknown
+        return flight_details  # No sorting if sort_by criteria is unknown (which should not be the case because of the limited options)
     
     sorted_details = sorted(flight_details, key=key_func, reverse=not ascending)
     if max_results is not None:
         sorted_details = sorted_details[:max_results]
     return sorted_details
 
-
+# Function to display the extracted API response information in an organized way and allow to display the Carrier logos
 def display_flights(flight_details, currency):
     for flight in flight_details:
         # Define the columns with relative widths
         cols = st.columns([3, 5, 1.5, 5, 2])
 
         with cols[0]:
-            st.image(flight['carriersLogo'][0], width=80)  # Adjust width as needed
-            st.text(flight['carriersName'][0])  # Carrier name below the logo
+            st.image(flight['carriersLogo'][0], width=80)  # st.image allows to print the carriersLogo from the url in API response
+            st.text(flight['carriersName'][0])  
 
         with cols[1]:
             st.text("From:")
@@ -180,11 +180,11 @@ def display_flights(flight_details, currency):
 
         st.markdown("---")
 
-
+# main code in which handles user interactions and in which all the functions are called
 def flight_main():
     st.title('Flight Search Tool')
 
-    # Define a mapping from user-friendly terms to data keys
+    # Define a mapping from user-friendly terms to data keys for the sorting functions
     sorting_options = {
         "Price": "priceRaw",
         "Duration": "durationInMinutes",
@@ -194,7 +194,7 @@ def flight_main():
      # Initialize session state variables if not already set
     if 'flight_details' not in st.session_state:
         st.session_state.flight_details = []
-
+    # User interface design
     with st.form("flight_form"):
         from_entity = st.text_input("Departure City", "New York")
         to_entity = st.text_input("Arrival City", "London")
@@ -205,9 +205,9 @@ def flight_main():
         infants = st.slider("Infants (under 2)", 0, 8, 0)
         cabin_class = st.selectbox("Cabin Class", ['economy', 'premium_economy', 'business', 'first'])
         submit_button = st.form_submit_button("Search Flights")
-
+    #run the flight search code once all user input is collected
     if submit_button:
-        # Check if no passengers are entered
+        # Check if no passengers are entered and handle error
         if adults == 0 and children == 0 and infants == 0:
             st.error("Please enter passengers.")
         else:
@@ -217,7 +217,7 @@ def flight_main():
                 from_entity_id = extract_city_id(dep_results)[0]['presentationId']
                 to_entity_id = extract_city_id(arr_results)[0]['presentationId']
                 flights = get_one_way_flights(from_entity_id, to_entity_id, str(depart_date), 'US', 'en-US', currency, adults, children, infants, cabin_class)
-
+                # keeps the user informed of the state of the API call status
                 if 'data' in flights and 'context' in flights['data'] and 'status' in flights['data']['context']:
                     if flights['data']['context']['status'] == "incomplete":
                         st.warning("Completing results...")
@@ -229,17 +229,16 @@ def flight_main():
 
                     st.session_state.flight_details = extract_flight_information(flights)
 
-    # Display sorting options and results count input outside the form to interact dynamically
+    # Display sorting options and results count input to interact dynamically
     sort_by = st.selectbox("Sort by", list(sorting_options.keys()), key="sort_by")
     sort_order = st.radio("Sort order", ['Ascending', 'Descending'], key="sort_order")
     result_count = st.number_input("Max results to display", 1, 100, 10, key="result_count")
-
+    # executes the sorting
     if st.session_state.flight_details:
         sorted_flights = sort_flights(st.session_state.flight_details, sorting_options[sort_by], ascending=(sort_order == 'Ascending'), max_results=result_count)
         display_flights(sorted_flights, currency)
     else:
         st.error("Flight search did not return expected data or no search has been initiated.")
 
-# Adjusting as needed for execution
 if __name__ == '__main__':
     flight_main()
