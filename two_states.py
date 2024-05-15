@@ -13,11 +13,13 @@ def run_visa_checker():
     def navigate_to(page_name):
         st.session_state.current_page = page_name
 
-    #user selects his passport and destination country
+    # User selects his passport and destination country
     departure_country = st.selectbox("Select your passport country:", [""] + list(country_codes.keys()), key='checker_departure_country')
     destination_country = st.selectbox("Select your destination country:", [""] + list(country_codes.keys()), key='checker_destination_country')
 
     if st.button('Check Visa Requirement'):
+        
+        #Gets the country code for the countries and fetches data from the API
         departure_code = get_country_code(departure_country) if departure_country else None
         destination_code = get_country_code(destination_country) if destination_country else None
         if departure_code and destination_code:
@@ -44,7 +46,7 @@ def run_visa_checker():
     elif st.session_state.current_page == 'visa_free_destinations':
         display_visa_free_destinations(st.session_state.departure_code)
 
-#Print Visa Requirements
+# Print Visa Requirements according to ata fetched
 def handle_visa_result():
     visa_status = st.session_state.get('visa_status', '')
     if visa_status == 'VF':
@@ -65,7 +67,7 @@ def handle_visa_result():
     else:
         st.warning('The visa requirement for your destination is not clear or is unspecified.')
 
-#function to display visa-free-destinations
+# Function to display visa-free-destinations
 def display_visa_free_destinations(departure_code):
     url = f'https://rough-sun-2523.fly.dev/api/{departure_code}'
     response = requests.get(url)

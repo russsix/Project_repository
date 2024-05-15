@@ -1,4 +1,5 @@
 #cs.py
+# This file creates a navigation bar with all the three features
 
 import streamlit as st
 from two_states import run_visa_checker

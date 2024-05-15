@@ -1,6 +1,9 @@
 This is the description of the Group 1.4.
 
-Our site has three different features.
+Our site is called Check-it. 
+Thanks to it a person can quickly check visa requirements and contemporaneously look for cheap flights. This can help save a lot of time in organizing a trip and having a comprehensive overview regarding the requirements and prices for the holiday. This tool can only be used for holidays, as visa requirements for work or study stays are not taken into consideration.
+
+More precisely, the site has three different features.
 The first is 'Two States'.
     The main goal is that the user inputs two countries and gets the Visa requirements between them.
 The second is 'One State'.

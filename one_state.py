@@ -6,14 +6,14 @@ import pandas as pd
 
 from DataBase_Countries import country_codes, get_country_code, get_country_name
 
-#Fetch visa status data from the API
+# Fetch visa status data from the API
 def fetch_visa_status_data(passport_code):
     url = f'https://rough-sun-2523.fly.dev/api/{passport_code}'
     response = requests.get(url)
     data = response.json()
     return data
 
- #Assign country name based on country codes
+# Assign country name based on country codes
 def visa_status(country, visa_data):
     visa_required_countries = [get_country_name(code) for code in visa_data.get('vr', {}).get('data', [])]
     visa_on_arrival_countries = [get_country_name(code) for code in visa_data.get('voa', {}).get('data', [])]
@@ -34,9 +34,9 @@ def visa_status(country, visa_data):
     else:
         return 'Unknown'
 
-#Display a map
+# Display a map
 def plot_map(visa_data):
-    """Plot the world map with countries colored based on visa requirement status."""
+    # Plot the world map with countries colored based on visa requirement status
     world = gpd.read_file("./global_states.geojson") 
     world['Visa Status'] = world['ADMIN'].apply(lambda x: visa_status(x, visa_data))
 
@@ -52,7 +52,7 @@ def plot_map(visa_data):
         geojson=world.geometry, 
         locations=world.index, 
         color='Visa Status',
-        color_discrete_map={
+        color_discrete_map={ # Creation of a dictionary with visa requirements associated to colors
             'Visa Required': 'red',
             'Visa On Arrival': 'yellow',
             'Visa Free': 'green',
