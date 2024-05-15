@@ -16,7 +16,8 @@ def load_country_codes(file_name):
 def load_country_codes_second (file_name):
     df=pd.read_csv(file_name, header=None)
 
-    # Create a dictionary with country names as keys and three-letter codes as values
+    """Create a dictionary with iso-2 codes as keys and iso-3 codes as values, will be used for the map, 
+    as the json file only contains iso-3 codes""" 
     country_code_dict_two = pd.Series(df[2].values, index=df[1]).to_dict()
     return country_code_dict_two
 
