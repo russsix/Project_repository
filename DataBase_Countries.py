@@ -1,10 +1,12 @@
 #DataBase_Countries
+"""This files takes informations from the country-code.csv, that was found in the API documentation,
+and creates a dictionary with the corresponding keys and values"""
 
 import pandas as pd
 
 def load_country_codes(file_name):
     # Load the CSV file from the given filename
-    df = pd.read_csv(file_name, header=None)  # Specify header=None to indicate no header in the CSV file
+    df = pd.read_csv(file_name, header=None)  
     
     # Create a dictionary with country names as keys and two-letter codes as values
     country_code_dict = pd.Series(df[1].values, index=df[0]).to_dict()
