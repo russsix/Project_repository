@@ -17,10 +17,11 @@ def load_country_codes_second (file_name):
     df=pd.read_csv(file_name, header=None)
 
     # Create a dictionary with country names as keys and three-letter codes as values
-    country_code_dict_two = pd.Series(df[2].values, index=df[0]).to_dict()
+    country_code_dict_two = pd.Series(df[2].values, index=df[1]).to_dict()
     return country_code_dict_two
 
 file_name = 'country-code.csv'
+
 country_codes = load_country_codes(file_name)
 country_codes_second = load_country_codes_second (file_name)
 
@@ -34,4 +35,4 @@ country_names = {code: country for country, code in country_codes.items()} # Cre
 def get_country_name(code):
     return country_names.get(code, 'None')
 
-st.write (country_codes_second)
+
