@@ -4,7 +4,7 @@ import geopandas as gpd
 import plotly.express as px
 import pandas as pd
 
-from DataBase_Countries import country_codes, get_country_code, get_country_name
+from DataBase_Countries import country_codes, get_country_code, country_codes_second
 
 # Fetch visa status data from the API
 def fetch_visa_status_data(passport_code):
@@ -14,22 +14,22 @@ def fetch_visa_status_data(passport_code):
     return data
 
 # Assign country name based on country codes
-def visa_status(country, visa_data):
-    visa_required_countries = [get_country_name(code) for code in visa_data.get('vr', {}).get('data', [])]
-    visa_on_arrival_countries = [get_country_name(code) for code in visa_data.get('voa', {}).get('data', [])]
-    visa_free_countries = [get_country_name(code) for code in visa_data.get('vf', {}).get('data', [])]
-    covid_ban_countries = [get_country_name(code) for code in visa_data.get('cb', {}).get('data', [])]
-    no_admission_countries = [get_country_name(code) for code in visa_data.get('na', {}).get('data', [])]
+def visa_status(iso3, visa_data):
+    visa_required_countries = [country_codes_second.get(code) for code in visa_data.get('vr', {}).get('data', [])]
+    visa_on_arrival_countries = [country_codes_second.get(code) for code in visa_data.get('voa', {}).get('data', [])]
+    visa_free_countries = [country_codes_second.get(code) for code in visa_data.get('vf', {}).get('data', [])]
+    covid_ban_countries = [country_codes_second.get(code) for code in visa_data.get('cb', {}).get('data', [])]
+    no_admission_countries = [country_codes_second.get(code) for code in visa_data.get('na', {}).get('data', [])]
 
-    if country in covid_ban_countries:
+    if iso3 in covid_ban_countries:
         return 'COVID-19 Ban'
-    elif country in no_admission_countries:
+    elif iso3 in no_admission_countries:
         return 'No Admission'
-    elif country in visa_required_countries:
+    elif iso3 in visa_required_countries:
         return 'Visa Required'
-    elif country in visa_on_arrival_countries:
+    elif iso3 in visa_on_arrival_countries:
         return 'Visa On Arrival'
-    elif country in visa_free_countries:
+    elif iso3 in visa_free_countries:
         return 'Visa Free'
     else:
         return 'Unknown'
@@ -38,7 +38,7 @@ def visa_status(country, visa_data):
 def plot_map(visa_data):
     # Plot the world map with countries colored based on visa requirement status
     world = gpd.read_file("./global_states.geojson") 
-    world['Visa Status'] = world['ADMIN'].apply(lambda x: visa_status(x, visa_data))
+    world['Visa Status'] = world['ADMO_3'].apply(lambda x: visa_status(x, visa_data))
 
     # Ensure the ordering of 'Visa Status' categories
     category_order = ['Visa Required', 'Visa On Arrival', 'Visa Free', 'COVID-19 Ban', 'No Admission', 'Unknown']
