@@ -34,6 +34,3 @@ country_names = {code: country for country, code in country_codes.items()} # Cre
 # Gets country names for given country codes
 def get_country_name(code):
     return country_names.get(code, 'None')
-
-
-st.write (country_codes_second)
