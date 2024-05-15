@@ -36,3 +36,4 @@ def get_country_name(code):
     return country_names.get(code, 'None')
 
 
+st.write (country_codes_second)
