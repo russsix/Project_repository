@@ -49,7 +49,7 @@ def get_one_way_flights(from_entity_id, to_entity_id, depart_date, market, local
     response = requests.get(url, headers=headers, params=querystring)
     return response.json()
 
-# Function to call API for round trips (function not dropped from the final run code because of unresolved technical errors)
+# Function to call API for round trips (function dropped from the final run code because of unresolved technical errors)
 def get_round_trip_flights(from_entity_id, to_entity_id, depart_date, return_date, market, locale, currency, adults, children, infants, cabin_class = 'economy'):
     url = "https://sky-scanner3.p.rapidapi.com/flights/search-roundtrip"
     querystring = {
